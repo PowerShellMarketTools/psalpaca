@@ -1,0 +1,24 @@
+name: PSAlpaca
+
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
+
+permissions: read-all
+
+jobs:
+  test:
+    - uses: actions/checkout@v4
+    - name: Copy Local Files
+      run: |
+        New-Item -ItemType Directory -Path "C:\Program Files\WindowsPowerShell\Modules" -Name "PSAlpaca"
+        Copy-Item ./PSAlpaca.psm1 -Destination C:\Program Files\WindowsPowerShell\Modules\PSAlpaca
+        Copy-Item ./PSAlpaca.psd1 -Destination C:\Program Files\WindowsPowerShell\Modules\PSAlpaca
+        Copy-Item ./private -Recurse -Destination C:\Program Files\WindowsPowerShell\Modules\PSAlpaca
+        Copy-Item ./public -Recurse -Destination C:\Program Files\WindowsPowerShell\Modules\PSAlpaca
+    - name: Import PSAlpaca Module
+      run: Import-Module PSAlpaca
