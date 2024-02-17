@@ -21,6 +21,8 @@ jobs:
       run: Import-Module PSAlpaca
     - name: Install Pester 5
       run: |
-        Uninstall-Module Pester -Confirm:$false -Force -Verbose
         Install-Module Pester -Scope AllUsers -RequiredVersion $LatestPester.Version -Confirm:$false -Force -Verbose
         Get-Module -Name Pester -ListAvailable
+    - name: Run Pester
+      run: |
+        
