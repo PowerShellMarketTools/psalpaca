@@ -21,7 +21,6 @@ jobs:
       run: Import-Module PSAlpaca
     - name: Install Pester 5
       run: |
-        $LatestPester = Find-Module -Name Pester
-        Get-Module -Name Pester | Where-Object {$_.Version -ne $LatestPester.Version} | ForEach-Object { Uninstall-Module $_ -Verbose }
+        Uninstall-Module Pester -Scope AllUsers -Confirm:$false -Force -Verbose
         Install-Module Pester -Scope AllUsers -RequiredVersion $LatestPester.Version -Confirm:$false -Force -Verbose
         Get-Module -Name Pester -ListAvailable
