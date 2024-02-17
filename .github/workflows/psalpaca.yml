@@ -17,11 +17,18 @@ jobs:
     - uses: actions/checkout@v4
     - name: Copy Local Files
       run: |
-        New-Item -ItemType Directory -Path "C:\Program\ Files\WindowsPowerShell\Modules" -Name "PSAlpaca"
-        Copy-Item -Path PSAlpaca.psm1 -Destination "C:\Program Files\WindowsPowerShell\Modules\PSAlpaca"
-        Copy-Item -Path PSAlpaca.psd1 -Destination "C:\Program Files\WindowsPowerShell\Modules\PSAlpaca"
-        Copy-Item -Path private -Recurse -Destination "C:\Program Files\WindowsPowerShell\Modules\PSAlpaca"
-        Copy-Item -Path public -Recurse -Destination "C:\Program Files\WindowsPowerShell\Modules\PSAlpaca"
+        $targetPath = "C:\Program Files\WindowsPowerShell\Modules\PSAlpaca"
+        New-Item -ItemType Directory -Path $targetPath -Force
+        # Check and remove 'private' and 'public' if they already exist
+        $privatePath = Join-Path -Path $targetPath -ChildPath "private"
+        $publicPath = Join-Path -Path $targetPath -ChildPath "public"
+        if (Test-Path $privatePath) { Remove-Item $privatePath -Recurse -Force }
+        if (Test-Path $publicPath) { Remove-Item $publicPath -Recurse -Force }
+        # Now copy items
+        Copy-Item -Path PSAlpaca.psm1 -Destination $targetPath
+        Copy-Item -Path PSAlpaca.psd1 -Destination $targetPath
+        Copy-Item -Path private -Recurse -Destination $targetPath
+        Copy-Item -Path public -Recurse -Destination $targetPath
     - name: Import PSAlpaca Module
       run: Import-Module PSAlpaca
     - name: Install Pester 5
