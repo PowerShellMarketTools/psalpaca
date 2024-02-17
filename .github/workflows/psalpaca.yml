@@ -22,5 +22,7 @@ jobs:
         Copy-Item ./PSAlpaca.psd1 -Destination C:\Program Files\WindowsPowerShell\Modules\PSAlpaca
         Copy-Item ./private -Recurse -Destination C:\Program Files\WindowsPowerShell\Modules\PSAlpaca
         Copy-Item ./public -Recurse -Destination C:\Program Files\WindowsPowerShell\Modules\PSAlpaca
+      shell: powershell
     - name: Import PSAlpaca Module
       run: Import-Module PSAlpaca
+      shell: powershell
