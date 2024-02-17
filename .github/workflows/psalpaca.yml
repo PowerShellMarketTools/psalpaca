@@ -22,5 +22,5 @@ jobs:
     - name: Install Pester 5
       run: |
         $LatestPester = Find-Module -Name Pester
-        Get-Module -Name Pester | Where-Object {$_.Version -ne $LatestPester.Version} | ForEach-Object { Uninstall-Module $_ }
-        Install-Module Pester -Scope AllUsers -RequiredVersion $LatestPester.Version
+        Get-Module -Name Pester | Where-Object {$_.Version -ne $LatestPester.Version} | ForEach-Object { Uninstall-Module $_ -Verbose }
+        Install-Module Pester -Scope AllUsers -RequiredVersion $LatestPester.Version -Confirm:$false -Force -Verbose
