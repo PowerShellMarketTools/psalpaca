@@ -20,8 +20,8 @@ jobs:
         New-Item -ItemType Directory -Path "C:\Program\ Files\WindowsPowerShell\Modules" -Name "PSAlpaca"
         Copy-Item -Path ./PSAlpaca.psm1 -Destination "C:\Program Files\WindowsPowerShell\Modules\PSAlpaca"
         Copy-Item -Path ./PSAlpaca.psd1 -Destination "C:\Program Files\WindowsPowerShell\Modules\PSAlpaca"
-        Copy-Item -Path ./private -Recurse -Destination "C:\Program Files\WindowsPowerShell\Modules\PSAlpaca"
-        Copy-Item -Path ./public -Recurse -Destination "C:\Program Files\WindowsPowerShell\Modules\PSAlpaca"
+        Copy-Item -Path ./private -Recurse -Destination "C:\Program Files\WindowsPowerShell\Modules\PSAlpaca\private"
+        Copy-Item -Path ./public -Recurse -Destination "C:\Program Files\WindowsPowerShell\Modules\PSAlpaca\public"
     - name: Import PSAlpaca Module
       run: Import-Module PSAlpaca
     - name: Install Pester 5
