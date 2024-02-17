@@ -1,6 +1,6 @@
 # Import the module containing the Get-AlpacaApiConfiguration function
 BeforeAll {
-    . $PSScriptRoot\AlpacaApi.psm1
+    Import-Module -Name PSAlpaca
 }
 
 # Test when environment variables are set
