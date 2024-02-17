@@ -38,5 +38,4 @@ jobs:
                 $pesterConfig.$propName = $_.Value
             }
         }
-        [PesterConfiguration] | ConvertTo-Json
         Invoke-Pester -Configuration $pesterConfig
