@@ -10,6 +10,9 @@ on:
 
 permissions: read-all
 
+env:
+  PESTER_VERSION: 5.5.0
+
 jobs:
   test:
     runs-on: windows-latest
@@ -25,6 +28,7 @@ jobs:
         Get-Module -Name Pester -ListAvailable
     - name: Run Pester Tests with Configuration
       run: |
+        Import-Module Pester -RequiredVersion ${{ env.PESTER_VERSION }}
         $configFilePath = Join-Path -Path $env:GITHUB_WORKSPACE -ChildPath "PSAlpaca.Tests.Config.psd1"
         $configData = Import-PowerShellDataFile -Path $configFilePath
         $pesterConfig = [PesterConfiguration]::new()
