@@ -23,6 +23,15 @@ jobs:
       run: |
         Install-Module Pester -Scope AllUsers -RequiredVersion $LatestPester.Version -Confirm:$false -Force -Verbose
         Get-Module -Name Pester -ListAvailable
-    - name: Run Pester
+    - name: Run Pester Tests with Configuration
       run: |
-        
+        $configFilePath = Join-Path -Path $env:GITHUB_WORKSPACE -ChildPath "PSAlpaca.Tests.Config.psd1"
+        $configData = Import-PowerShellDataFile -Path $configFilePath
+        $pesterConfig = [PesterConfiguration]::new()
+        $configData.PSObject.Properties | ForEach-Object {
+            $propName = $_.Name
+            if ($pesterConfig.PSObject.Properties[$propName]) {
+                $pesterConfig.$propName = $_.Value
+            }
+        }
+        Invoke-Pester -Configuration $pesterConfig

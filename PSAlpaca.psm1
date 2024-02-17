@@ -1,7 +1,7 @@
 # AlpacaBot.psm1
 
 # Get a list of all .ps1 files under the 'Private' directory
-$PrivateFunctionFiles = Get-ChildItem -Path "$($PSScriptRoot)\Private" -Filter '*.ps1' -Recurse
+$PrivateFunctionFiles = Get-ChildItem -Path "$($PSScriptRoot)\private" -Filter '*.ps1' -Recurse
 
 # Dot-source each .ps1 file from the 'Private' directory to import functions into the current scope
 foreach ($PrivateFunctionFile in $PrivateFunctionFiles) {
@@ -9,7 +9,7 @@ foreach ($PrivateFunctionFile in $PrivateFunctionFiles) {
 }
 
 # Get a list of all .ps1 files under the 'Public' directory
-$PublicFunctionFiles = Get-ChildItem -Path "$($PSScriptRoot)\Public" -Filter '*.ps1' -Recurse
+$PublicFunctionFiles = Get-ChildItem -Path "$($PSScriptRoot)\public" -Filter '*.ps1' -Recurse
 
 # List to keep track of all function names that need to be exported
 $FunctionsToExport = @()
