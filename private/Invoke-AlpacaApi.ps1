@@ -14,7 +14,7 @@ function Invoke-AlpacaApi {
         [Parameter(Mandatory = $false)]
         [hashtable]$Arguments,
         
-        [bool]$Paper
+        [switch]$Paper
     )
 
     # Load API configuration
@@ -54,13 +54,13 @@ function Invoke-AlpacaApi {
 
     # Prepare headers for authentication
     if ($ApiName -eq "Broker") {
-        if ($null -eq $Config.BrokerCredential) {
-            Write-Error "Broker credentials are required for Broker API. Use Set-AlpacaApiConfiguration to set them."
+        if ($null -eq $Config.BrokerCredentialEncoded) {
+            Write-Error "Broker credentials are required for Broker API. Use Set-AlpacaApiConfiguration first."
             return
         }
-        $encodedCredentials = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($Config.BrokerCredential.UserName + ':' + $Config.BrokerCredential.GetNetworkCredential().Password))
         $Headers = @{
-            "Authorization" = "Basic $encodedCredentials"
+            'Access-Control-Allow-Origin' = '*'
+            "authorization" = "Basic $($Config.BrokerCredentialEncoded)"
         }
     }
     else {

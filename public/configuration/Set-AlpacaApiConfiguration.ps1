@@ -17,18 +17,26 @@ function Set-AlpacaApiConfiguration {
     $env:ALPACA_API_KEY = $ApiKey
     $env:ALPACA_API_SECRET = $ApiSecret
 
+    $Credentials = @{
+        api_key = $ApiKey
+        api_secret = $ApiSecret
+    }
+
     if ($AlpacaCredential) {
         $username = $AlpacaCredential.UserName
         $password = $AlpacaCredential.GetNetworkCredential().Password
-        $encodedPassword = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($password))
-        $env:ALPACA_USER_CREDENTIAL = "$($username):$($encodedPassword)"
+
+        # Add broker credentials to the hashtable as a nested object
+        $Credentials['broker_credential'] = @{
+            username = $username
+            password = $password
+        }
     }
 
     if ($SaveProfile) {
-        $CredentialsPath = if ([Environment]::OSVersion.Platform -eq [PlatformID]::Win32NT) {
-            Join-Path $env:USERPROFILE ".alpaca-credentials"
-        } else {
-            Join-Path $HOME ".alpaca-credentials"
+        $CredentialsPath = switch ([Environment]::OSVersion.Platform) {
+            [PlatformID]::Win32NT { Join-Path $env:USERPROFILE ".alpaca-credentials" }
+            default { Join-Path $HOME ".alpaca-credentials" }
         }
 
         # Check if credentials file already exists and prompt user for action
@@ -47,16 +55,6 @@ function Set-AlpacaApiConfiguration {
         }
         
         # Save or overwrite credentials
-        $Credentials = @{
-            ApiKey = $ApiKey
-            ApiSecret = $ApiSecret
-        }
-        
-        if ($AlpacaCredential) {
-            $Credentials['Username'] = $username
-            $Credentials['EncodedPassword'] = $encodedPassword
-        }
-        
         $Credentials | ConvertTo-Json | Set-Content -Path $CredentialsPath -Force
         Write-Host "Alpaca API credentials profile saved successfully."
     }

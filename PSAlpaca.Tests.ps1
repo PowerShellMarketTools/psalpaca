@@ -12,14 +12,14 @@ Describe 'Get-AlpacaApiConfiguration with Environment Variables' {
 
         $env:ALPACA_API_KEY = 'testApiKey'
         $env:ALPACA_API_SECRET = 'testApiSecret'
-        $env:ALPACA_USER_CREDENTIAL = 'true'
+        $env:ALPACA_USER_CREDENTIAL = New-Object 
     }
 
     It 'Returns valid credentials from environment variables' {
         $result = Get-AlpacaApiConfiguration
         $result.ApiKey | Should -Be 'testApiKey'
         $result.ApiSecret | Should -Be 'testApiSecret'
-        $result.BrokerCredential | Should -BeNullOrEmpty
+        $result.BrokerCredential | Should -BeOfType [PSCredential]
     }
 
     AfterAll {
