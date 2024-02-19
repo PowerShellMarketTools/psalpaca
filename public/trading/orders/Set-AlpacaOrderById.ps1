@@ -36,7 +36,8 @@ Author: Your Name
 API Reference: For more details, visit the Alpaca API documentation.
 
 .LINK
-https://docs.alpaca.markets/reference#patchv2ordersid
+https://docs.alpaca.markets/reference/patchorderbyorderid
+
 #>
 
 function Set-AlpacaOrderById {
