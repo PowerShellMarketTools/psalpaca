@@ -36,4 +36,4 @@ foreach ($PublicFunctionFile in $PublicFunctionFiles) {
 Write-Verbose "Exporting functions: $($FunctionsToExport -join ', ')..."
 Export-ModuleMember -Function $FunctionsToExport
 
-Write-Verbose "AlpacaBot module processing complete."
+Write-Verbose "PSAlpaca module processing complete."

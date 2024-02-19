@@ -10,9 +10,12 @@ function Invoke-AlpacaApi {
 
         [Parameter(Mandatory = $true)]
         [string]$Method,
+
+        [Parameter(Mandatory = $false)]
+        [string]$QueryString,
         
         [Parameter(Mandatory = $false)]
-        [hashtable]$Arguments,
+        [hashtable]$BodyArguments,
         
         [switch]$Paper
     )
@@ -41,16 +44,8 @@ function Invoke-AlpacaApi {
     }
     
     # Construct base URL
-    $BaseUrl = "https://${ApiNameUriPart}.alpaca.markets/$ApiVersion/$Endpoint"
-    Write-Verbose -Message "Building query parameter string and URI."
-    if ($null -ne $Arguments) {
-        $Query = ($Arguments.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join "&"
-        $Url = "$BaseUrl?$Query"
-    }
-    else {
-        $Url = $BaseUrl
-    }
-    Write-Verbose -Message "Full URI query string: $Url"
+    $BaseUri = "https://${ApiNameUriPart}.alpaca.markets/$ApiVersion/$Endpoint"
+    Write-Verbose -Message "Base url is: $($BaseUri)"
 
     # Prepare headers for authentication
     if ($ApiName -eq "Broker") {
@@ -60,7 +55,7 @@ function Invoke-AlpacaApi {
         }
         $Headers = @{
             'Access-Control-Allow-Origin' = '*'
-            "authorization" = "Basic $($Config.BrokerCredentialEncoded)"
+            "authorization"               = "Basic $($Config.BrokerCredentialEncoded)"
         }
     }
     else {
@@ -69,13 +64,34 @@ function Invoke-AlpacaApi {
             "APCA-API-SECRET-KEY" = $Config.ApiSecret
         }
     }
+
+    if ($QueryString) {
+        $Uri = "$($BaseUri)$($QueryString)"
+    }
+    else {
+        $Uri = $BaseUri
+    }
+
+    Write-Verbose -Message ("Full Uri is: $($Uri)")
+
+    $ApiParams = @{
+        Uri = $Uri
+        Headers = $Headers
+        Method = $Method
+        ContentType = "application/json"
+    }
+
+    if ($BodyArguments) {
+        Write-Verbose -Message ("Body request: $($BodyArguments | Select-Object *)")
+        $ApiParams.Add('Body', $($BodyArguments | ConvertTo-Json))
+    }
     
     # Make the API request
     try {
-        $Response = Invoke-RestMethod -Uri $Url -Headers $Headers -Method $Method -ContentType "application/json"
+        $Response = Invoke-RestMethod @ApiParams
     }
-    catch {
-        Write-Error "Failed to invoke Alpaca API: $_"
+    catch [System.Exception] {
+        Write-Error "Failed to invoke Alpaca API: $($_.Exception)"
         return $null
     }
     
