@@ -49,7 +49,7 @@ function Set-AlpacaOrderById {
         [Parameter(Mandatory = $false)]
         [int]$Quantity,
 
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $false)]
         [ValidateSet('Day', 'Gtc', 'Opg', 'Cls', 'Ioc', 'Fok')]
         [string]$TimeInForce,
 
@@ -71,7 +71,7 @@ function Set-AlpacaOrderById {
     # Construct the body of the update request dynamically
     $BodyArguments = @{}
     if ($Quantity) { $BodyArguments.Add("qty", $Quantity) }
-    $BodyArguments.Add("time_in_force", $TimeInForce)
+    if ($TimeInForce) { $BodyArguments.Add("time_in_force", $TimeInForce) }
     if ($LimitPrice) { $BodyArguments.Add("limit_price", $LimitPrice) }
     if ($StopPrice) { $BodyArguments.Add("stop_price", $StopPrice) }
     if ($TrailPrice) { $BodyArguments.Add("trail_price", $TrailPrice) }
@@ -82,6 +82,10 @@ function Set-AlpacaOrderById {
         Method        = "Patch"
         QueryString   = "/$($OrderId)"
         BodyArguments = $BodyArguments
+    }
+
+    if ($Paper) {
+        $ApiParams.Add('Paper', $true)
     }
 
     Try {
