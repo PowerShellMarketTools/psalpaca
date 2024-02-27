@@ -17,7 +17,7 @@ foreach ($PrivateFunctionFile in $PrivateFunctionFiles) {
 
 # Get a list of all .ps1 files under the 'Public' directory
 Write-Verbose "Retrieving .ps1 files from the 'Public' directory..."
-$PublicFunctionFiles = Get-ChildItem -Path "$($PSScriptRoot)\public" -Filter '*.ps1' -Recurse
+$PublicFunctionFiles = Get-ChildItem -Path "$($PSScriptRoot)\public" -Recurse -Depth 3 | Where-Object {$_.Extension -eq ".ps1"}
 
 # List to keep track of all function names that need to be exported
 $FunctionsToExport = @()

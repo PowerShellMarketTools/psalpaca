@@ -3,7 +3,7 @@
 Closes (liquidates) the account's open position for a specified symbol or asset ID in Alpaca Trading.
 
 .DESCRIPTION
-The Remove-AlpacaPositionBySymbol function liquidates an open position for the given symbol or asset ID in Alpaca Trading. It supports both long and short positions. Users can specify either a quantity (Quantity) or a percentage of the position to liquidate. The function can target either the live or paper trading environment.
+The Remove-AlpacaPositionBySymbol function liquidates an open position for the given symbol or asset ID in Alpaca Trading. It supports both long and short positions. Users can specify either a quantity (Quantity) or a percentage of the position to liquidate. The function can target either the live or paper trading environment. Now supports -Confirm and -WhatIf parameters to provide additional control and safety before executing the operation.
 
 .PARAMETER SymbolOrAssetId
 The symbol or asset ID of the position to liquidate. This parameter is mandatory.
@@ -27,17 +27,23 @@ Remove-AlpacaPositionBySymbol -SymbolOrAssetId "AAPL" -Percentage 50 -Paper
 
 Liquidates 50% of the AAPL position in the paper trading environment.
 
+.INPUTS
+None. You cannot pipe objects to Remove-AlpacaPositionBySymbol.
+
+.OUTPUTS
+None. This cmdlet does not generate any output.
+
 .NOTES
 Author: [Your Name]
 Requires: PowerShell 5.1 or higher, Alpaca PowerShell module
+The cmdlet now supports -Confirm and -WhatIf parameters for safer operation.
 
 .LINK
 https://docs.alpaca.markets/reference/deleteopenposition
-
 #>
 
 function Remove-AlpacaPositionBySymbol {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess=$true, ConfirmImpact='High')]
     Param (
         [Parameter(Mandatory = $true)]
         [string]$SymbolOrAssetId,
@@ -54,7 +60,7 @@ function Remove-AlpacaPositionBySymbol {
 
     $ApiParams = @{
         ApiName = "Trading"
-        Endpoint = "positions/$SymbolOrAssetId"
+        Endpoint = "positions/$($SymbolOrAssetId)"
         Method = "DELETE"
     }
 
@@ -63,29 +69,28 @@ function Remove-AlpacaPositionBySymbol {
         Write-Error "Specify one of: 'Quantity' or 'Percentage'."
         return $null
     } elseif (-not [string]::IsNullOrWhiteSpace($Quantity)) {
-        $ApiParams.Add('QueryString', "?Quantity=$($Quantity)")
+        $ApiParams.Add('QueryString', "?Quantity=$Quantity")
     } elseif (-not [string]::IsNullOrWhiteSpace($Percentage)) {
         if ($Percentage -le 0 -or $Percentage -gt 100) {
             Write-Error "Percentage must be between 0 and 100."
             return $null
         }
         $ApiParams.Add('QueryString', "?percentage=$($Percentage)")
-    } else {
-        Write-Error "Either 'Quantity' or 'Percentage' must be specified."
-        return $null
     }
 
     if ($Paper) {
         $ApiParams.Add('Paper', $true)
     }
 
-    Try {
-        Write-Verbose "Invoking Alpaca API to liquidate position for symbol: $SymbolOrAssetId..."
-        $Response = Invoke-AlpacaApi @ApiParams
-        return $Response
-    }
-    Catch [System.Exception] {
-        Write-Error "API call to liquidate position failed: $($_.Exception)"
-        return $null
+    if ($PSCmdlet.ShouldProcess($SymbolOrAssetId, "Close open position")) {
+        Try {
+            Write-Verbose "Invoking Alpaca API to close open position for symbol: $($SymbolOrAssetId)..."
+            $Response = Invoke-AlpacaApi @ApiParams
+            return $Response
+        }
+        Catch [System.Exception] {
+            Write-Error "API call to liquidate position failed: $($_.Exception)"
+            return $null
+        }
     }
 }

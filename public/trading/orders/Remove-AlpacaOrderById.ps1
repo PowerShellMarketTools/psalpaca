@@ -3,7 +3,7 @@
 Removes an order from Alpaca Trading using its Order ID.
 
 .DESCRIPTION
-The Remove-AlpacaOrderById cmdlet removes an existing order from Alpaca Trading by its Order ID. It can target both live and paper trading environments. The cmdlet makes an API call to Alpaca's "DELETE orders/{order_id}" endpoint to remove the specified order.
+The Remove-AlpacaOrderById cmdlet removes an existing order from Alpaca Trading by its Order ID. It can target both live and paper trading environments. The cmdlet makes an API call to Alpaca's "DELETE orders/{order_id}" endpoint to remove the specified order. Now supports -Confirm and -WhatIf parameters to provide additional control and safety before executing the operation.
 
 .PARAMETER OrderId
 The ID of the order to remove. This parameter is mandatory.
@@ -24,13 +24,14 @@ Removes the specified order from the paper trading environment.
 .NOTES
 Author: [Your Name]
 Requires: PowerShell 5.1 or higher, Alpaca PowerShell module
+The cmdlet now supports -Confirm and -WhatIf parameters for safer operation.
 
 .LINK
 https://docs.alpaca.markets/reference/deleteorderbyorderid
 
 #>
 function Remove-AlpacaOrderById {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess=$true, ConfirmImpact='High')]
     Param (
         [Parameter(Mandatory = $true)]
         [string]$OrderId,
@@ -40,24 +41,25 @@ function Remove-AlpacaOrderById {
     )
 
     $ApiParams = @{
-        ApiName       = "Trading"
-        Endpoint      = "orders"
-        Method        = "DELETE"
-        QueryString   = "/$($OrderId)"
+        ApiName     = "Trading"
+        Endpoint    = "orders/$($OrderId)"
+        Method      = "DELETE"
     }
 
     if ($Paper) {
-        $ApiParams.Add('Paper', $true)
+        $ApiParams['Paper'] = $true
         Write-Verbose "Accessing paper trading environment."
     }
 
-    Try {
-        Write-Verbose "Invoking Alpaca API to close order_id: $($OrderId)..."
-        $Response = Invoke-AlpacaApi @ApiParams
-        return $Response
-    }
-    Catch [System.Exception] {
-        Write-Error "API call to close position failed: $($_.Exception)"
-        return $null
+    if ($PSCmdlet.ShouldProcess($OrderId, "Remove order")) {
+        Try {
+            Write-Verbose "Invoking Alpaca API to remove order_id: $($OrderId)..."
+            $Response = Invoke-AlpacaApi @ApiParams
+            return $Response
+        }
+        Catch [System.Exception] {
+            Write-Error "API call to remove order failed: $($_.Exception)"
+            return $null
+        }
     }
 }

@@ -82,7 +82,7 @@ function Invoke-AlpacaApi {
     }
 
     if ($BodyArguments) {
-        Write-Verbose -Message ("Body request: $($BodyArguments | Select-Object *)")
+        Write-Verbose -Message ("Body request: $($BodyArguments | Select-Object * | ConvertTo-Json -Depth 50 -Compress)")
         $ApiParams.Add('Body', $($BodyArguments | ConvertTo-Json))
     }
     
