@@ -72,14 +72,14 @@ function Get-AlpacaAccountPortfolioHistory {
         $ApiQueryString += "&intraday_reporting=$($IntradayReporting)"
     }
     if ($PSBoundParameters.ContainsKey('Start')) {
-        $startString = $Start.ToUniversalTime().ToString("o")  # ISO 8601 format
+        $startString = (Get-Date $Start.ToUniversalTime() -Format 'yyyy-MM-ddTHH:mm:ss')
         $ApiQueryString += "&start=$($startString)"
     }
     if ($PSBoundParameters.ContainsKey('PnlReset')) {
         $ApiQueryString += "&pnl_reset=$($PnlReset)"
     }
     if ($PSBoundParameters.ContainsKey('End')) {
-        $endString = $End.ToUniversalTime().ToString("o")  # ISO 8601 format
+        $endString = (Get-Date $End.ToUniversalTime() -Format 'yyyy-MM-ddTHH:mm:ss')  # ISO 8601 format
         $ApiQueryString += "&end=$($endString)"
     }
 

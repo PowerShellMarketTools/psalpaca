@@ -52,7 +52,10 @@ Author: Your Name
 API Reference: Check the Alpaca API documentation for more details about the parameters and their values.
 
 .LINK
-https://docs.alpaca.markets/api-documentation/api-v2/account-activities/
+https://docs.alpaca.markets/reference/getaccountactivitiesbyactivitytype-1
+
+.LINK
+https://docs.alpaca.markets/reference/getaccountactivities-2
 
 #>
 
@@ -70,17 +73,21 @@ function Get-AlpacaAccountActivities {
         )]
         [string]$ActivityType,
 
+        [Parameter(Mandatory = $false)]
         [datetime]$Date,
 
+        [Parameter(Mandatory = $false)]
         [datetime]$Until,
 
+        [Parameter(Mandatory = $false)]
         [datetime]$After,
 
-        [ValidateSet("asc", "desc")]
-        [string]$Direction = 'desc',
+        [Parameter(Mandatory = $false)]
+        [ValidateSet("Ascending", "Descending")]
+        [string]$Direction,
 
         [Parameter(Mandatory = $false)]
-        [int]$MaxResults = 100,
+        [int]$MaxResults,
 
         [Parameter(Mandatory = $false)]
         [switch]$Paper
@@ -98,32 +105,48 @@ function Get-AlpacaAccountActivities {
         }
     }
 
-    $queryParameters = @{
-        'activity_type' = $ActivityType
-        'direction' = $Direction.ToLower()
-        'page_size' = $MaxResults
+    $QueryParameters = @{}
+
+    if ($Direction) {
+        $QueryParameters.Add('direction', $(
+                switch ($Direction) {
+                    "Ascending" { "asc" };
+                    "Descending" { "desc" }
+                }
+            )
+        )
+    }
+
+    if ($MaxResults) {
+        $QueryParameters.Add('page_size', $MaxResults)
     }
 
     if ($Date) {
-        $queryParameters['date'] = $Date.ToString("o")  # ISO 8601 format
+        $QueryParameters.Add('date', (Get-Date $Date -Format 'yyyy-MM-dd'))
     }
 
     if ($Until) {
-        $queryParameters['until'] = $Until.ToString("o")
+        $QueryParameters.Add('until', (Get-Date $Until -Format 'yyyy-MM-dd'))
     }
 
     if ($After) {
-        $queryParameters['after'] = $After.ToString("o")
+        $QueryParameters.Add('after', (Get-Date $After -Format 'yyyy-MM-dd'))
     }
 
-    $queryString = '?' + ($queryParameters.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" } -join "&")
-
-    Write-Verbose "Query String: $queryString"
+    if ($ActivityType -notin @("All", "TradeActivity", "NonTradeActivity")) {
+        $QueryString = '?' + [System.Web.HttpUtility]::UrlEncode(($QueryParameters.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" } ) -join "&")
+        Write-Verbose "Query String: $($QueryString)"
+    }
 
     try {
-        $endpoint = "account/activities"
-        
-        $Response = Invoke-AlpacaApi -ApiName "Trading" -Endpoint $endpoint -Method "GET" -QueryString $queryString -Paper:$Paper
+        if ($ActivityType -in @("All", "TradeActivity", "NonTradeActivity")) {
+            $Endpoint = "account/activities"
+        }
+        else {
+            $Endpoint = "account/activities/$($ActivityType)"
+        }
+
+        $Response = Invoke-AlpacaApi -ApiName "Trading" -Endpoint $Endpoint -Method "GET" -QueryString $queryString -Paper:$Paper
         Write-Verbose "API Response received"
         return $Response
     }
