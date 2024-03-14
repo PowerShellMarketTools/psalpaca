@@ -1,0 +1,44 @@
+name: Bug Report
+description: File a bug report for PSAlpaca
+title: "[Bug]: "
+labels: ["bug", "triage"]
+projects: ["PowerShellMarketTools/psalpaca"]
+assignees:
+  - nateaskoff
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report for PSAlpaca!
+
+        Please provide as much detail as possible to help us investigate and resolve the issue.
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: Your email address or preferred contact method
+    validations:
+      required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the bug or issue you encountered.
+      placeholder: Please provide a clear description of the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: version
+    attributes:
+      label: PSAlpaca Version
+      description: What version of psalpaca are you using?
+      placeholder: '1.0.0, 1.1.0, etc..'
+    validations:
+      required: true
+  - type: textarea
+    id: errors
+    attributes:
+      label: Error Output
+      description: Copy and paste any relevant error outputs here.
+      placeholder: Paste your error outputs here.

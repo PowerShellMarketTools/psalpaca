@@ -1,0 +1,53 @@
+name: Feature Request
+description: Request a new feature or enhancement for PSAlpaca
+title: "[Feature Request]: "
+labels: ["feature request", "enhancement", "triage"]
+projects: ["PowerShellMarketTools/psalpaca"]
+assignees:
+  - nateaskoff
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a new feature or enhancement for PSAlpaca!
+
+        Please provide as much detail as possible about the feature you're requesting.
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: Your email address or preferred contact method
+    validations:
+      required: false
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature Description
+      description: Describe the new feature or enhancement you're requesting.
+      placeholder: Please provide a clear description of the proposed feature.
+    validations:
+      required: true
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: Describe how you would use this new feature or enhancement.
+      placeholder: Please provide a clear description of the use case.
+    validations:
+      required: true
+  - type: textarea
+    id: code-example
+    attributes:
+      label: Code Example
+      description: Provide a code example illustrating how you envision using this feature.
+      placeholder: |
+        ```powershell
+        # Your code example here
+        ```
+  - type: textarea
+    id: benefits
+    attributes:
+      label: Benefits
+      description: Explain the benefits or improvements this feature would bring to PSAlpaca.
+      placeholder: Please describe the benefits.

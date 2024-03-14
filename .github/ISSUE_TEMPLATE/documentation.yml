@@ -1,0 +1,36 @@
+name: Documentation Update
+description: Update documentation for PSAlpaca
+title: "[Documentation]: "
+labels: ["documentation", "enhancement", "triage"]
+projects: ["PowerShellMarketTools/psalpaca"]
+assignees:
+  - nateaskoff
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for contributing to the documentation of PSAlpaca!
+
+        Please provide details about the documentation update you're proposing.
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: Your email address or preferred contact method
+    validations:
+      required: false
+  - type: textarea
+    id: what-update
+    attributes:
+      label: What documentation update are you proposing?
+      description: Describe the documentation changes you would like to make.
+      placeholder: Please provide a clear description of the proposed changes.
+    validations:
+      required: true
+  - type: textarea
+    id: links
+    attributes:
+      label: Relevant Links
+      description: Provide any relevant links or references to support your proposed changes.
+      placeholder: Paste relevant links here.

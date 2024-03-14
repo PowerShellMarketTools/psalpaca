@@ -1,8 +1,5 @@
 # AlpacaBot.psm1
 
-# Enable verbose preference
-$VerbosePreference = 'Continue'
-
 Write-Verbose "Starting to process AlpacaBot module..."
 
 # Get a list of all .ps1 files under the 'Private' directory
