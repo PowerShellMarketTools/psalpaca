@@ -21,17 +21,17 @@ Ensure you have the latest version of PowerShellGet installed to avoid any compa
 Before using PSAlpaca, you need to configure it with your Alpaca API key and secret. These credentials can be obtained by creating an account on the Alpaca website.
 
 ```powershell
-Set-PSAlpacaConfiguration -ApiKey "your_api_key" -ApiSecret "your_api_secret"
+Set-PSAlpacaConfiguration -ApiKey "your_api_key" -ApiSecret "your_api_secret" -AlpacaCredential (Get-Credential) -SaveProfile
 ```
 
 ## Documentation
-For a detailed description of all commands, their parameters, and usage examples, please refer to the [PSAlpaca Wiki](https://github.com/nateaskoff/PSAlpaca/wiki). The wiki includes comprehensive examples, troubleshooting tips, and best practices for using the PSAlpaca module effectively.
+For a detailed description of all commands, their parameters, and usage examples, please refer to the [PSAlpaca Wiki](https://github.com/PowerShellMarketTools/psalpaca/wiki). The wiki includes comprehensive examples, troubleshooting tips, and best practices for using the PSAlpaca module effectively.
 
 ## Contributing
 Contributions to PSAlpaca are welcome! Whether it's submitting bug reports, suggesting new features, or contributing code, your input is valuable to us. Please refer to the CONTRIBUTING.md file for guidelines on how to contribute.
 
 ## License
-PSAlpaca is released under the MIT License. See the [LICENSE](https://github.com/nateaskoff/PSAlpaca/LICENSE) file for more details.
+PSAlpaca is released under the MIT License. See the [LICENSE](https://github.com/PowerShellMarketTools/psalpaca/blob/main/LICENSE) file for more details.
 
 ## Disclaimer
 PSAlpaca is not affiliated with Alpaca Markets Inc. It is an independent project developed to facilitate access to the Alpaca trading platform via PowerShell. Users are responsible for complying with Alpaca's terms of service and ensuring that their trading activities are lawful.
