@@ -5,11 +5,8 @@ Retrieves account activities from Alpaca based on various filter criteria.
 .DESCRIPTION
 The Get-AlpacaAccountActivities function fetches account activities from the Alpaca platform. It supports filtering activities by type, date, and more, with support for pagination and ordering.
 
-.PARAMETER MultitypeFilter
-Specifies the general category of activities to fetch. Valid values are 'All', 'TradeActivity', and 'NonTradeActivity'.
-
 .PARAMETER ActivityType
-Specifies the specific type of activity to fetch. Includes various activity types such as 'FILL', 'TRANS', etc.
+Specifies the specific type of activity to fetch. This parameter is mandatory. Valid values include various activity types such as 'FILL', 'TRANS', etc.
 
 .PARAMETER Date
 Filters activities to a specific date.
@@ -23,11 +20,8 @@ Filters activities to those after the specified DateTime.
 .PARAMETER Direction
 Determines the order of the returned activities based on their date. Valid values are 'Ascending' and 'Descending'. Defaults to 'Descending'.
 
-.PARAMETER PageSize
+.PARAMETER MaxResults
 Defines the maximum number of activities to return in one response.
-
-.PARAMETER PageToken
-Used for pagination; specifies the token for the page of results to retrieve.
 
 .PARAMETER Paper
 If provided, fetches activities from the paper trading environment instead of the live trading environment.
@@ -36,11 +30,6 @@ If provided, fetches activities from the paper trading environment instead of th
 PS> Get-AlpacaAccountActivities -ActivityType FILL -Direction Ascending -Paper
 
 This example retrieves fill activities in ascending order from the paper trading environment.
-
-.EXAMPLE
-PS> Get-AlpacaAccountActivities -MultitypeFilter TradeActivity -After '2023-01-01' -PageSize 100
-
-This example fetches up to 100 trade activities that occurred after January 1, 2023.
 
 .EXAMPLE
 PS> Get-AlpacaAccountActivities -ActivityType DIV -Until '2023-12-31'
@@ -134,7 +123,7 @@ function Get-AlpacaAccountActivities {
     }
 
     if ($ActivityType -notin @("All", "TradeActivity", "NonTradeActivity")) {
-        $QueryString = '?' + [System.Web.HttpUtility]::UrlEncode(($QueryParameters.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" } ) -join "&")
+        $QueryString = '?' + ($QueryParameters.GetEnumerator() | ForEach-Object { "$($_.Key)=$([System.Web.HttpUtility]::UrlEncode($_.Value))" } ) -join "&"
         Write-Verbose "Query String: $($QueryString)"
     }
 
