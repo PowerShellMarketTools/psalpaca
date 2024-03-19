@@ -1,3 +1,20 @@
+<#
+.SYNOPSIS
+Retrieves Alpaca API configuration information including API key, API secret, and broker credentials.
+
+.DESCRIPTION
+The Get-AlpacaApiConfiguration cmdlet is used to retrieve Alpaca API configuration information necessary for accessing the Alpaca trading platform. This cmdlet reads API credentials from a JSON file stored in the user's home directory. It ensures that the required credentials are available and provides them as output.
+
+.PARAMETER None
+This cmdlet does not accept any parameters.
+
+.EXAMPLE
+Get-AlpacaApiConfiguration
+
+This example retrieves Alpaca API configuration information from the default credentials file location and displays it on the console.
+
+#>
+
 function Get-AlpacaApiConfiguration {
     [CmdletBinding()]
     Param ()

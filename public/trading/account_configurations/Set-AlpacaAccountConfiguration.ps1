@@ -60,6 +60,9 @@ This command enables trading if previously suspended and sets the account to not
 .NOTES
 Ensure that you have the necessary permissions and have authenticated with the Alpaca API before using this function.
 
+.LINK
+https://docs.alpaca.markets/reference/patchaccountconfig-1
+
 #>
 
 function Set-AlpacaAccountConfiguration {
