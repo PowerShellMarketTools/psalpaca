@@ -3,7 +3,7 @@
 Retrieves account activities from Alpaca based on various filter criteria.
 
 .DESCRIPTION
-The Get-AlpacaAccountActivities function fetches account activities from the Alpaca platform. It supports filtering activities by type, date, and more, with support for pagination and ordering.
+The Get-AlpacaAccountActivity function fetches account activities from the Alpaca platform. It supports filtering activities by type, date, and more, with support for pagination and ordering.
 
 .PARAMETER ActivityType
 Specifies the specific type of activity to fetch. This parameter is mandatory. Valid values include various activity types such as 'FILL', 'TRANS', etc.
@@ -27,12 +27,12 @@ Defines the maximum number of activities to return in one response.
 If provided, fetches activities from the paper trading environment instead of the live trading environment.
 
 .EXAMPLE
-PS> Get-AlpacaAccountActivities -ActivityType FILL -Direction Ascending -Paper
+PS> Get-AlpacaAccountActivity -ActivityType FILL -Direction Ascending -Paper
 
 This example retrieves fill activities in ascending order from the paper trading environment.
 
 .EXAMPLE
-PS> Get-AlpacaAccountActivities -ActivityType DIV -Until '2023-12-31'
+PS> Get-AlpacaAccountActivity -ActivityType DIV -Until '2023-12-31'
 
 This example retrieves dividend activities that occurred before December 31, 2023.
 
@@ -48,7 +48,7 @@ https://docs.alpaca.markets/reference/getaccountactivities-2
 
 #>
 
-function Get-AlpacaAccountActivities {
+function Get-AlpacaAccountActivity {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $true)]
@@ -127,19 +127,35 @@ function Get-AlpacaAccountActivities {
         Write-Verbose "Query String: $($QueryString)"
     }
 
-    try {
-        if ($ActivityType -in @("All", "TradeActivity", "NonTradeActivity")) {
-            $Endpoint = "account/activities"
-        }
-        else {
-            $Endpoint = "account/activities/$($ActivityType)"
-        }
+    if ($ActivityType -in @("All", "TradeActivity", "NonTradeActivity")) {
+        $Endpoint = "account/activities"
+    }
+    else {
+        $Endpoint = "account/activities/$($ActivityType)"
+    }
 
-        $Response = Invoke-AlpacaApi -ApiName "Trading" -Endpoint $Endpoint -Method "GET" -QueryString $queryString -Paper:$Paper
-        Write-Verbose "API Response received"
+    $ApiParams = @{
+        ApiName  = "Trading"
+        Endpoint = $Endpoint
+        Method   = "Get"
+    }
+
+    if ($null -ne $QueryString) {
+        $ApiParams.Add('QueryString', $QueryString)
+    }
+
+    if ($Paper) {
+        $ApiParams.Add('Paper', $true)
+        Write-Verbose "Paper trading mode enabled."
+    }
+    
+    Try {
+        Write-Verbose "Invoking Alpaca API..."
+        $Response = Invoke-AlpacaApi @ApiParams
         return $Response
     }
-    catch {
-        Write-Error "Failed to fetch account activities: $($_.Exception.Message)"
+    Catch [System.Exception] {
+        Write-Error "API call failed: $($_.Exception)"
+        return $null
     }
 }

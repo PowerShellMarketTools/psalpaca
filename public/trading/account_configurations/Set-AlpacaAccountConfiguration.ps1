@@ -33,27 +33,27 @@ Specifies the condition under which trade confirmations are emailed. Valid value
 Indicates whether the operation should be performed in paper trading mode. Does not require a value.
 
 .EXAMPLE
-PS> Set-AlpacaAccountConfigurations -Paper
+PS> Set-AlpacaAccountConfiguration -Paper
 
 This command operates in paper trading mode without changing any specific account settings, effectively showing the current configurations.
 
 .EXAMPLE
-PS> Set-AlpacaAccountConfigurations -DayTradingMarginCallCheck 'Entry' -FractionalTrading $true
+PS> Set-AlpacaAccountConfiguration -DayTradingMarginCallCheck 'Entry' -FractionalTrading $true
 
 This command sets the day trading margin call check to apply at entry and enables fractional trading for the account.
 
 .EXAMPLE
-PS> Set-AlpacaAccountConfigurations -MaxMarginMultiplier 2 -NoShorting $true -PatternDayTraderCheck 'Exit'
+PS> Set-AlpacaAccountConfiguration -MaxMarginMultiplier 2 -NoShorting $true -PatternDayTraderCheck 'Exit'
 
 This command sets the maximum margin multiplier to 2, disables short selling, and sets the pattern day trader check to apply at exit.
 
 .EXAMPLE
-PS> Set-AlpacaAccountConfigurations -PtpNoExceptionEntryCheck $false -SuspendTrading $true -TradeConfirmEmail 'all' -Paper
+PS> Set-AlpacaAccountConfiguration -PtpNoExceptionEntryCheck $false -SuspendTrading $true -TradeConfirmEmail 'all' -Paper
 
 This command disables the no-exception entry check, suspends trading, sets trade confirm email to 'all', and operates in paper trading mode.
 
 .EXAMPLE
-PS> Set-AlpacaAccountConfigurations -SuspendTrading $false -TradeConfirmEmail 'none'
+PS> Set-AlpacaAccountConfiguration -SuspendTrading $false -TradeConfirmEmail 'none'
 
 This command enables trading if previously suspended and sets the account to not send trade confirmation emails.
 
@@ -62,7 +62,7 @@ Ensure that you have the necessary permissions and have authenticated with the A
 
 #>
 
-function Set-AlpacaAccountConfigurations {
+function Set-AlpacaAccountConfiguration {
     [CmdletBinding(SupportsShouldProcess=$true, ConfirmImpact='High')]
     Param (
         [Parameter(Mandatory = $false)]
