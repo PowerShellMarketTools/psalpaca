@@ -1,4 +1,4 @@
-function Get-AlpacaAccountConfigurations {
+function Get-AlpacaAccountConfiguration {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $false)]
