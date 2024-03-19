@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Invokes the Alpaca API to perform various actions such as retrieving market data, executing trades, and accessing brokerage information.
+
+.DESCRIPTION
+The Invoke-AlpacaApi cmdlet is used to make HTTP requests to the Alpaca API for different purposes based on the provided parameters. It constructs the appropriate API endpoint URL, sets the necessary authentication headers, and sends the HTTP request with optional query parameters and request body. The response from the API is returned.
+
+.PARAMETER ApiName
+Specifies the type of Alpaca API to invoke. Valid values are "Broker", "Trading", or "Data".
+
+.PARAMETER Endpoint
+Specifies the specific endpoint of the Alpaca API to access.
+
+.PARAMETER Method
+Specifies the HTTP method to use for the API request, such as GET, POST, PUT, DELETE, etc.
+
+.PARAMETER QueryString
+Specifies the query string to append to the API endpoint URL. This parameter is optional.
+
+.PARAMETER BodyArguments
+Specifies the body of the API request as a hashtable. This parameter is optional.
+
+.PARAMETER Paper
+Indicates whether to use the paper trading environment. If this switch is provided, the requests are directed to the Alpaca paper trading environment.
+
+.EXAMPLE
+Invoke-AlpacaApi -ApiName "Data" -Endpoint "bars/day" -Method "GET" -QueryString "?symbol=AAPL&limit=5"
+
+This example retrieves daily bars data for the AAPL symbol from the Alpaca Data API.
+
+.EXAMPLE
+Invoke-AlpacaApi -ApiName "Trading" -Endpoint "orders" -Method "POST" -BodyArguments @{symbol="AAPL"; qty=10; side="buy"}
+
+This example places a buy order for 10 shares of AAPL stock using the Alpaca Trading API.
+
+#>
+
 function Invoke-AlpacaApi {
     [CmdletBinding()]
     Param (
