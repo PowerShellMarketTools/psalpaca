@@ -181,7 +181,6 @@ Function Get-AlpacaOptionsContract {
 
         $Endpoint = "options/contracts"
 
-        $QueryString = ('?' + ($QueryParameters.GetEnumerator() | ForEach-Object { "$($_.Key)=$([System.Web.HttpUtility]::UrlEncode($_.Value))" } ) -join "&").Replace(' ', '&')
         Write-Verbose "Query String: $($QueryString)"
     }
 
@@ -192,7 +191,14 @@ Function Get-AlpacaOptionsContract {
     }
 
     if ($QueryParameters) {
-        $ApiParams.Add('QueryString', ('?' + ($QueryParameters.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" } ) -join "&").Replace(' ', '&'))
+        $ApiParams.Add(
+            'QueryString',
+            ('?' + (
+                ($QueryParameters.GetEnumerator() | ForEach-Object {
+                    "$($_.Key)=$($_.Value)" }
+                ) -join '&'
+            ))
+        )
     }
 
     if ($Paper) {

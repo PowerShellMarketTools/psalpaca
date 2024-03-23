@@ -76,7 +76,14 @@ Function Get-AlpacaMarketCalendarInfo {
     }
 
     if ($null -ne $QueryString) {
-        $ApiParams.Add('QueryString', $QueryString)
+        $ApiParams.Add(
+            'QueryString',
+            ('?' + (
+                ($QueryParameters.GetEnumerator() | ForEach-Object {
+                    "$($_.Key)=$($_.Value)" }
+                ) -join '&'
+            ))
+        )
     }
 
     if ($Paper) {

@@ -123,8 +123,14 @@ function Get-AlpacaAccountActivity {
     }
 
     if ($ActivityType -notin @("All", "TradeActivity", "NonTradeActivity")) {
-        $QueryString = '?' + ($QueryParameters.GetEnumerator() | ForEach-Object { "$($_.Key)=$([System.Web.HttpUtility]::UrlEncode($_.Value))" } ) -join "&"
-        Write-Verbose "Query String: $($QueryString)"
+        $ApiParams.Add(
+            'QueryString',
+            ('?' + (
+                ($QueryParameters.GetEnumerator() | ForEach-Object {
+                    "$($_.Key)=$($_.Value)" }
+                ) -join '&'
+            ))
+        )
     }
 
     if ($ActivityType -in @("All", "TradeActivity", "NonTradeActivity")) {

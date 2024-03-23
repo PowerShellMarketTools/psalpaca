@@ -54,6 +54,7 @@ function Invoke-AlpacaApi {
         [Parameter(Mandatory = $false)]
         [hashtable]$BodyArguments,
         
+        [Parameter(Mandatory = $false)]
         [switch]$Paper
     )
 
@@ -77,7 +78,7 @@ function Invoke-AlpacaApi {
     $ApiVersion = switch ($ApiName) {
         "Broker" { "v1" }
         "Trading" { "v2" }
-        "Data" { "v1beta1" }
+        "Data" { "v1beta3" }
     }
     
     # Construct base URL
