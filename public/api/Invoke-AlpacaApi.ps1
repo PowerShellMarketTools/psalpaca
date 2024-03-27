@@ -76,7 +76,14 @@ function Invoke-AlpacaApi {
 
     $ApiVersion = switch ($ApiName) {
         "Trading" { "v2" }
-        "Data" { "v1beta3" }
+        "Data" {
+            if ($Endpoint -like "*stocks*") {
+                "v2"
+            }
+            else {
+                "v1beta3"
+            } 
+        }
     }
 
     # Construct base URL
@@ -84,11 +91,9 @@ function Invoke-AlpacaApi {
     Write-Verbose -Message "Base url is: $($BaseUri)"
 
     # Prepare headers for authentication
-    if ($ApiName -eq "Trading") {
-        $Headers = @{
-            "APCA-API-KEY-ID"     = $Config.ApiKey
-            "APCA-API-SECRET-KEY" = $Config.ApiSecret
-        }
+    $Headers = @{
+        "APCA-API-KEY-ID"     = $Config.ApiKey
+        "APCA-API-SECRET-KEY" = $Config.ApiSecret
     }
 
     if ($QueryString) {

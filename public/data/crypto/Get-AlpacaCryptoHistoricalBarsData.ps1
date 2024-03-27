@@ -105,7 +105,7 @@ Function Get-AlpacaCryptoHistoricalBarsData {
     }
 
     if ($MaxResults) {
-        # once paper env returns data we can complete this section to respect MaxResults
+        $QueryParameters.Add('limit', $MaxResults)
     }
     
     $ApiParams = @{
