@@ -119,7 +119,7 @@ function Get-AlpacaAsset {
             'QueryString',
             ('?' + (
                 ($QueryParameters.GetEnumerator() | ForEach-Object {
-                    "$($_.Key)=$($_.Value)" }
+                    "$($_.Key)=$([System.Web.HttpUtility]::UrlEncode($_.Value))" }
                 ) -join '&'
             ))
         )

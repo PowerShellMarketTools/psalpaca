@@ -11,9 +11,6 @@ Specifies the Alpaca API key. This parameter is mandatory.
 .PARAMETER ApiSecret
 Specifies the Alpaca API secret. This parameter is mandatory.
 
-.PARAMETER AlpacaCredential
-Specifies the broker credentials as a PSCredential object. This parameter is optional.
-
 .PARAMETER SaveProfile
 Indicates whether to save the provided credentials to a file for future use. If this switch is provided, the credentials are saved; otherwise, they are not saved. This parameter is optional.
 
@@ -22,11 +19,6 @@ Set-AlpacaApiConfiguration -ApiKey "YOUR_API_KEY" -ApiSecret "YOUR_API_SECRET"
 
 This example sets the Alpaca API configuration by providing the API key and API secret.
 
-.EXAMPLE
-Set-AlpacaApiConfiguration -ApiKey "YOUR_API_KEY" -ApiSecret "YOUR_API_SECRET" -AlpacaCredential (Get-Credential) -SaveProfile
-
-This example sets the Alpaca API configuration with broker credentials provided through a credential prompt and saves the configuration to a profile file.
-
 #>
 
 function Set-AlpacaApiConfiguration {
@@ -34,13 +26,10 @@ function Set-AlpacaApiConfiguration {
     Param (
         [Parameter(Mandatory = $true)]
         [string]$ApiKey,
-        
+
         [Parameter(Mandatory = $true)]
         [string]$ApiSecret,
-        
-        [Parameter(Mandatory = $false)]
-        [System.Management.Automation.PSCredential]$AlpacaCredential,
-        
+
         [switch]$SaveProfile
     )
 
@@ -51,17 +40,6 @@ function Set-AlpacaApiConfiguration {
     $Credentials = @{
         api_key = $ApiKey
         api_secret = $ApiSecret
-    }
-
-    if ($AlpacaCredential) {
-        $username = $AlpacaCredential.UserName
-        $password = $AlpacaCredential.GetNetworkCredential().Password
-
-        # Add broker credentials to the hashtable as a nested object
-        $Credentials['broker_credential'] = @{
-            username = $username
-            password = $password
-        }
     }
 
     if ($SaveProfile) {

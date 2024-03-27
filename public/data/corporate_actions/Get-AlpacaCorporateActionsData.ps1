@@ -41,10 +41,7 @@ Function Get-AlpacaCorporateActionsData {
 
         [Parameter(Mandatory = $false)]
         [ValidateSet("Ascending", "Descending")]
-        [string]$Sort,
-
-        [Parameter(Mandatory = $false)]
-        [switch]$Paper
+        [string]$Sort
     )
 
     $QueryParameters = @{}
