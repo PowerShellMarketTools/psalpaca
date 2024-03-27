@@ -21,7 +21,7 @@ Ensure you have the latest version of PowerShellGet installed to avoid any compa
 Before using PSAlpaca, you need to configure it with your Alpaca API key and secret. These credentials can be obtained by creating an account on the Alpaca website.
 
 ```powershell
-Set-PSAlpacaConfiguration -ApiKey "your_api_key" -ApiSecret "your_api_secret" -AlpacaCredential (Get-Credential) -SaveProfile
+Set-AlpacaApiConfiguration -ApiKey "your_api_key" -ApiSecret "your_api_secret" -SaveProfile
 ```
 
 ## Documentation
