@@ -58,10 +58,11 @@ function Get-AlpacaOrder {
     Param (
         [Parameter(Mandatory = $false)]
         [ValidateSet('All', 'Open', 'Closed')]
-        [string]$Status = 'Open', # Default to 'Open' if not specified
+        [string]$Status,
 
         [Parameter(Mandatory = $false)]
-        [int]$Limit = 50, # Default to 50 if not specified
+        [ValidateRange(50, 500)]
+        [int]$Limit,
 
         [Parameter(Mandatory = $false)]
         [datetime]$After,
@@ -71,7 +72,7 @@ function Get-AlpacaOrder {
 
         [Parameter(Mandatory = $false)]
         [ValidateSet('Ascending', 'Descending')]
-        [string]$Sort = 'Descending', # Default to 'Descending' if not specified
+        [string]$Sort = 'Descending',
 
         [Parameter(Mandatory = $false)]
         [bool]$Nested,
@@ -83,59 +84,51 @@ function Get-AlpacaOrder {
         [switch]$Paper
     )
 
-    Write-Verbose "Validating parameters..."
-
-    if (($After) -and ($Until)) {
+    # Validate parameters
+    if ($After -and $Until) {
         Write-Error "After and Until cannot be used together."
         return
     }
 
-    # Initialize the query string with the first parameter
-    $ApiQueryStr = "status=$($Status.ToLower())"
-
-    # Add limit to the query string
-    if (($Limit -lt 50) -or ($Limit -gt 500)) {
-        Write-Error "Limit must be between 50 and 500."
-        return
+    # Build query string
+    $QueryParameters = @{
+        status    = $Status.ToLower()
+        limit     = $Limit
+        direction = if ($Sort -eq 'Ascending') { 'asc' } else { 'desc' }
     }
-    $ApiQueryStr += "&limit=$Limit"
-    
-    # Process the After parameter
+
     if ($After) {
-        $iso8601After = $After.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
-        $encodedAfter = [System.Web.HttpUtility]::UrlEncode($iso8601After)
-        $ApiQueryStr += "&after=$encodedAfter"
+        $QueryParameters.Add('after', (Get-Date $After -Format "yyyy-MM-dd"))
     }
 
-    # Process the Until parameter
     if ($Until) {
-        $iso8601Until = $Until.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
-        $encodedUntil = [System.Web.HttpUtility]::UrlEncode($iso8601Until)
-        $ApiQueryStr += "&until=$encodedUntil"
+        $QueryParameters.Add('until', (Get-Date $Until -Format "yyyy-MM-dd"))
     }
 
-    # Process the Sort parameter
-    $direction = $Sort -eq 'Ascending' ? 'asc' : 'desc'
-    $ApiQueryStr += "&direction=$direction"
-    
-    # Process the Nested parameter
     if ($Nested) {
-        $ApiQueryStr += "&nested=$Nested"
+        $QueryParameters.Add('nested', $true)
     }
 
-    # Process the Symbols parameter
     if ($Symbols) {
-        $symbolsQueryParam = $Symbols -join ','
-        $ApiQueryStr += "&symbols=$symbolsQueryParam"
+        $QueryParameters.Add('symbols', ($Symbols -join ','))
     }
 
-    Write-Verbose "Final API Query String: $($ApiQueryStr)"
-
+    # Construct API parameters
     $ApiParams = @{
-        ApiName     = "Trading"
-        Endpoint    = "orders"
-        Method      = "Get"
-        QueryString = "?$($ApiQueryStr)"
+        ApiName  = "Trading"
+        Endpoint = "orders"
+        Method   = "Get"
+    }
+
+    if ($null -ne $QueryParameters) {
+        $ApiParams.Add(
+            'QueryString',
+            ('?' + (
+                ($QueryParameters.GetEnumerator() | ForEach-Object {
+                    "$($_.Key)=$([System.Web.HttpUtility]::UrlEncode($_.Value))" }
+                ) -join '&'
+            ))
+        )
     }
 
     if ($Paper) {
@@ -145,7 +138,7 @@ function Get-AlpacaOrder {
 
     Try {
         Write-Verbose "Invoking Alpaca API..."
-        $Response = Invoke-AlpacaApi @ApiParams
+        $Response = Invoke-AlpacaApi @apiParams
         return $Response
     }
     Catch [System.Exception] {

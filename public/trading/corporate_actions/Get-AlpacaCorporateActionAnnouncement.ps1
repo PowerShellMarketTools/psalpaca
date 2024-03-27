@@ -124,7 +124,14 @@ function Get-AlpacaCorporateActionAnnouncement {
     }
 
     if ($QueryParameters.Count -gt 0) {
-        $ApiParams.Add('QueryString', ('?' + ($QueryParameters.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" } ) -join "&").Replace(' ', '&'))
+        $ApiParams.Add(
+            'QueryString',
+            ('?' + (
+                ($QueryParameters.GetEnumerator() | ForEach-Object {
+                    "$($_.Key)=$([System.Web.HttpUtility]::UrlEncode($_.Value))" }
+                ) -join '&'
+            ))
+        )
     }
 
     if ($Paper) {

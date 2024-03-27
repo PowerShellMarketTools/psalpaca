@@ -14,7 +14,7 @@ env:
   PESTER_VERSION: 5.5.0
 
 jobs:
-  test:
+  unit-tests:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
