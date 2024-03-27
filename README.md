@@ -28,7 +28,7 @@ Set-PSAlpacaConfiguration -ApiKey "your_api_key" -ApiSecret "your_api_secret" -A
 For a detailed description of all commands, their parameters, and usage examples, please refer to the [PSAlpaca Wiki](https://github.com/PowerShellMarketTools/psalpaca/wiki). The wiki includes comprehensive examples, troubleshooting tips, and best practices for using the PSAlpaca module effectively.
 
 ## Contributing
-Contributions to PSAlpaca are welcome! Whether it's submitting bug reports, suggesting new features, or contributing code, your input is valuable to us. Please refer to the CONTRIBUTING.md file for guidelines on how to contribute.
+Contributions to PSAlpaca are welcome! Whether it's submitting bug reports, suggesting new features, or contributing code, your input is valuable to us. Please refer to [CONTRIBUTING](https://github.com/PowerShellMarketTools/psalpaca/blob/main/CONTRIBUTING.md) file for guidelines on how to contribute.
 
 ## License
 PSAlpaca is released under the MIT License. See the [LICENSE](https://github.com/PowerShellMarketTools/psalpaca/blob/main/LICENSE) file for more details.
