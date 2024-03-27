@@ -4,7 +4,7 @@ Thank you for considering contributing to PSAlpaca! We welcome your involvement 
 
 ## Rules for Contributors
 
-1. **Email the Organization Owner**: Please reach out to the organization owner via email with your intent to join as a contributor.
+1. **Email the Organization Owner**: Please reach out to the organization owner via [email](mailto:nate.askoff@outlook.com) with your intent to join as a contributor.
 
 2. **Attach GitHub Issue**: All contributions must be associated with a GitHub issue. If there isn't an existing issue relevant to your contribution, please create one before proceeding. Contributions without a linked issue will not be considered.
 
