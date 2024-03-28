@@ -1,12 +1,12 @@
 # PSAlpaca PowerShell Module
 
 ## Overview
-PSAlpaca is a PowerShell module designed to provide easy access to the Alpaca API for algorithmic trading. Alpaca offers commission-free trading and is widely used for building trading bots and automated trading systems. The PSAlpaca module encapsulates the Alpaca API's functionalities, enabling PowerShell users to manage their portfolios, place orders, and retrieve market data directly from their scripts with minimal setup.
+PSAlpaca is a PowerShell module designed to provide easy access to the Alpaca API, enabling PowerShell users to manage their portfolios, place orders, and retrieve market data directly from their scripts with minimal setup.
 
 ## Features
-- **Broker API Endpoints Support**: Manage accounts, view account activities, and access brokerage services, facilitating a wide range of account management functionalities.
 - **Trading API Endpoints Support**: Execute trades with comprehensive support for various order types, including market, limit, stop, and stop-limit orders. This feature allows for detailed order management and execution strategies.
 - **Data API Endpoints Support**: Access real-time and historical market data to inform trading decisions. This includes market prices, volumes, and other essential market statistics, enabling effective market analysis and strategy development.
+- **A Note about the 'Brokers' Endpoint**: Alpaca does provide a 'Brokers' API, which is not targeted towards individual / retail traders. Therefore it has not been included in the module at this time.
 
 ## Installation
 To install PSAlpaca, use the following PowerShell command:
@@ -34,4 +34,4 @@ Contributions to PSAlpaca are welcome! Whether it's submitting bug reports, sugg
 PSAlpaca is released under the MIT License. See the [LICENSE](https://github.com/PowerShellMarketTools/psalpaca/blob/main/LICENSE) file for more details.
 
 ## Disclaimer
-PSAlpaca is not affiliated with Alpaca Markets Inc. It is an independent project developed to facilitate access to the Alpaca trading platform via PowerShell. Users are responsible for complying with Alpaca's terms of service and ensuring that their trading activities are lawful.
+The PowerShellMarketTools owner and community of contributors is not affiliated with Alpaca Markets Inc. Use of this module is **at your own risk**. This module is provided **as is** with no guaruntee that it is free of bugs or other issues that may result in financial loss. Users are additionally responsible for safeguarding their own API Key and Secret.
