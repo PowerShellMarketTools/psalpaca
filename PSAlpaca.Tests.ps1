@@ -1,4 +1,4 @@
-#Requires -Module Pester -Version 5.5
+#Requires -Modules @{ ModuleName = 'Pester'; RequiredVersion = '5.5'}
 
 # Import the module
 BeforeAll {
