@@ -31,5 +31,5 @@ jobs:
         Import-Module Pester -RequiredVersion ${{ env.PESTER_VERSION }}
         $configFilePath = Join-Path -Path $env:GITHUB_WORKSPACE -ChildPath "PSAlpaca.Tests.Config.psd1"
         $configData = Import-PowerShellDataFile -Path $configFilePath
-        $pesterConfig = New-PesterConfiguration @configData
+        $pesterConfig = New-PesterConfiguration -Hashtable $configData
         Invoke-Pester -Configuration $pesterConfig
