@@ -2,7 +2,7 @@
 
 # Import the relevant function for testing
 BeforeAll {
-    & "$($PSScriptRoot)/Invoke-AlpacaApi.ps1"
+    . "$($PSScriptRoot)/Invoke-AlpacaApi.ps1"
 }
 
 Describe "AlpacaApi" {

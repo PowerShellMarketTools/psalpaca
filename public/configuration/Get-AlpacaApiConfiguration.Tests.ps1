@@ -2,7 +2,7 @@
 
 # Import the relevant function for testing
 BeforeAll {
-    & "$($PSScriptRoot)/Get-AlpacaApiConfiguration.ps1"
+    . "$($PSScriptRoot)/Get-AlpacaApiConfiguration.ps1"
 }
 
 Describe "Configuration" {
