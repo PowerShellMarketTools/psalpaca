@@ -32,10 +32,4 @@ jobs:
         $configFilePath = Join-Path -Path $env:GITHUB_WORKSPACE -ChildPath "PSAlpaca.Tests.Config.psd1"
         $configData = Import-PowerShellDataFile -Path $configFilePath
         $pesterConfig = New-PesterConfiguration @configData
-        $configData.PSObject.Properties | ForEach-Object {
-            $propName = $_.Name
-            if ($pesterConfig.PSObject.Properties[$propName]) {
-                $pesterConfig.$propName = $_.Value
-            }
-        }
         Invoke-Pester -Configuration $pesterConfig
