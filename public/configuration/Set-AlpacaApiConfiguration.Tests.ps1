@@ -10,7 +10,7 @@ Describe "Configuration" {
         It "CredentialsCreated" {
             Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret" -Confirm:$false
             Test-Path -Path "$($HOME)/.alpaca-credentials" | Should -BeTrue
-            $config = Get-Content -Path "$($HOME)/.alpaca-credentials"
+            $config = Get-Content -Path "$($HOME)/.alpaca-credentials" | ConvertFrom-Json
             $config.ApiKey | Should -Be "TestApiKey"
             $config.ApiSecret | Should -Be "TestApiSecret"
         }
