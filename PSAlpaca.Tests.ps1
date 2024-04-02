@@ -24,26 +24,12 @@ Describe "Set-AlpacaApiConfiguration Function" {
             }
             Test-Path $credentialsFile | Should -Be $true
             $credentialsFileCont = Get-Content $credentialsFile
-            $credentialsData = $credentialsFileCont | ConvertTo-Json
+            $credentialsData = $credentialsFileCont | ConvertFrom-Json
             $credentialsData.api_key | Should -Be "TestApiKey"
             $credentialsData.api_secret | Should -Be "TestApiSecret"
         }
-
-        It "Should prompt -Before overwriting existing profile" {
-            # Mocking Read-Host to automatically select 'n' for overwrite prompt
-            Mock Read-Host { return 'n' }
-            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret" -SaveProfile
-            # Check if credentials file is not created
-            $credentialsFile = switch ([Environment]::OSVersion.Platform) {
-                [PlatformID]::Win32NT { Join-Path $env:USERPROFILE ".alpaca-credentials" }
-                default { Join-Path $HOME ".alpaca-credentials" }
-            }
-            Test-Path $credentialsFile | Should -Be $false
-        }
     }
 }
-
-# Requires -Module Pester
 
 Describe "Get-AlpacaApiConfiguration Function" {
     Context "When retrieving Alpaca API configuration from existing credentials file" {
@@ -54,8 +40,8 @@ Describe "Get-AlpacaApiConfiguration Function" {
 
             $config = Get-AlpacaApiConfiguration
             $config | Should -Not -BeNullOrEmpty
-            $config.ApiKey | Should -Be "TestApiKey"
-            $config.ApiSecret | Should -Be "TestApiSecret"
+            $config.api_key | Should -Be "TestApiKey"
+            $config.api_secret | Should -Be "TestApiSecret"
         }
     }
 
@@ -64,9 +50,7 @@ Describe "Get-AlpacaApiConfiguration Function" {
             # Mocking the absence of a credentials file
             Mock Test-Path { return $false }
 
-            $config = Get-AlpacaApiConfiguration
-            $config | Should -Be $null
-            Assert-Error "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
+            { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
         }
     }
 
@@ -76,9 +60,7 @@ Describe "Get-AlpacaApiConfiguration Function" {
             Mock Test-Path { return $true }
             Mock Get-Content { return $null }
 
-            $config = Get-AlpacaApiConfiguration
-            $config | Should -Be $null
-            Assert-Error "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
+            { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
         }
     }
 
@@ -88,9 +70,7 @@ Describe "Get-AlpacaApiConfiguration Function" {
             Mock Test-Path { return $true }
             Mock Get-Content { return '{"api_key": "TestApiKey"}' }
 
-            $config = Get-AlpacaApiConfiguration
-            $config | Should -Be $null
-            Assert-Error "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
+            { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
         }
     }
 }

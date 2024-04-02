@@ -1,5 +1,5 @@
 function Set-AlpacaApiConfiguration {
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess=$true)]
     Param (
         [Parameter(Mandatory = $true)]
         [string]$ApiKey,
