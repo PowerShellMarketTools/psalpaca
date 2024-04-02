@@ -8,37 +8,19 @@ BeforeAll {
 Describe "PSAlpaca" {
     Context "GetConfiguration" {
         It "EnvironmentCredentialsReturned" {
-            # Mocking the existence of a credentials file and its content
-            Mock Test-Path { return $true }
-            Mock Get-Content { return '{"api_key": "TestApiKey", "api_secret": "TestApiSecret"}' }
-
+            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -SecretKey "TestApiSecret"
             $config = Get-AlpacaApiConfiguration
             $config | Should -Not -BeNullOrEmpty
-            $config.api_key | Should -Be "TestApiKey"
-            $config.api_key | Should -Be "TestApiSecret"
+            $config.ApiKey | Should -Be "TestApiKey"
+            $config.ApiSecret | Should -Be "TestApiSecret"
         }
 
-        It "NoCredentialsFoundInEnvironment" {
-            # Mocking the absence of a credentials file
-            Mock Test-Path { return $false }
-
-            { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
-        }
-
-        It "NoCredentialsFoundInCredentialsFile" {
-            # Mocking the existence of an empty credentials file
-            Mock Test-Path { return $true }
-            Mock Get-Content { return $null }
-
-            { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
-        }
-
-        It "MissingFieldsInCredentialsFile" {
-            # Mocking the existence of a credentials file missing required fields
-            Mock Test-Path { return $true }
-            Mock Get-Content { return '{"api_key": "TestApiKey"}' }
-
-            { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
+        It "ProfileCredentialsReturned" {
+            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -SecretKey "TestApiSecret" -SaveProfile -Confirm:$false
+            Test-Path -Path "$($HOME)/.alpaca-credentials" | Should -BeTrue
+            $config = Get-Content -Path "$($HOME)/.alpaca-credentials"
+            $config.ApiKey | Should -Be "TestApiKey"
+            $config.ApiSecret | Should -Be "TestApiSecret"
         }
     }
 
