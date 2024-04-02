@@ -31,7 +31,7 @@ jobs:
         Import-Module Pester -RequiredVersion ${{ env.PESTER_VERSION }}
         $configFilePath = Join-Path -Path $env:GITHUB_WORKSPACE -ChildPath "PSAlpaca.Tests.Config.psd1"
         $configData = Import-PowerShellDataFile -Path $configFilePath
-        $pesterConfig = [PesterConfiguration]::new()
+        $pesterConfig = New-PesterConfiguration @configData
         $configData.PSObject.Properties | ForEach-Object {
             $propName = $_.Name
             if ($pesterConfig.PSObject.Properties[$propName]) {
