@@ -40,7 +40,7 @@ Author: Your Name
 https://docs.alpaca.markets/reference/getaccountportfoliohistory
 
 #>
-function Get-AlpacaAccountPortfolioHistory {
+Function Get-AlpacaAccountPortfolioHistory {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $false)]

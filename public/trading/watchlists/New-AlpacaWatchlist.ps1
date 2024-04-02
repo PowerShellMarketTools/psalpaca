@@ -32,7 +32,7 @@ https://docs.alpaca.markets/reference/postwatchlist
 
 #>
 
-function New-AlpacaWatchlist {
+Function New-AlpacaWatchlist {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $true)]

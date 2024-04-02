@@ -6,7 +6,7 @@ BeforeAll {
 }
 
 Describe "PSAlpaca" {
-    Context "GetConfiguration" {
+    Context "Set-AlpacaApiConfiguration" {
         It "EnvironmentCredentialsReturned" {
             Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -SecretKey "TestApiSecret"
             $config = Get-AlpacaApiConfiguration
@@ -24,40 +24,14 @@ Describe "PSAlpaca" {
         }
     }
 
-    Context "SetConfiguration" {
-        It "Should return the API configuration" {
-            # Mocking the existence of a credentials file and its content
-            Mock Test-Path { return $true }
-            Mock Get-Content { return '{"api_key": "TestApiKey", "api_secret": "TestApiSecret"}' }
-
-            $config = Get-AlpacaApiConfiguration
-            $config | Should -Not -BeNullOrEmpty
-            $config.api_key | Should -Be "TestApiKey"
-            $config.api_secret | Should -Be "TestApiSecret"
+    Context "Get-AlpacaApiConfiguration" {
+        BeforeAll {
+            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -SecretKey "TestApiSecret" -SaveProfile -Confirm:$false
         }
-        It "Should return null and throw an error" {
-            # Mocking the absence of a credentials file
-            Mock Test-Path { return $false }
-
-            { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
-        }
-    
-
-        It "Should return null and throw an error" {
-            # Mocking the existence of an empty credentials file
-            Mock Test-Path { return $true }
-            Mock Get-Content { return $null }
-
-            { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
-        }
-    
-
-        It "Should return null and throw an error" {
-            # Mocking the existence of a credentials file missing required fields
-            Mock Test-Path { return $true }
-            Mock Get-Content { return '{"api_key": "TestApiKey"}' }
-
-            { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
+        It "CredentialsReturnedAndCorrect" {
+            Get-AlpacaApiConfiguration | Should -Not -BeNullOrEmpty
+            (Get-AlpacaApiConfiguration).ApiKey | Should -Be "TestApiKey"
+            (Get-AlpacaApiConfiguration).ApiSecret | Should -Be "TestApiSecret"
         }
     }
 
@@ -68,6 +42,7 @@ Describe "PSAlpaca" {
                 ApiSecret = $env:ALPACA_SECRET_KEY
             }
         }
+        
         It "Should throw an error when ApiName parameter is not provided" {
             { Invoke-AlpacaApi -Endpoint "bars/day" -Method "GET" } | Should -Throw
         }

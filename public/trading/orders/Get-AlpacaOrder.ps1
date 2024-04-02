@@ -53,7 +53,7 @@ https://docs.alpaca.markets/reference/getallorders
 
 #>
 
-function Get-AlpacaOrder {
+Function Get-AlpacaOrder {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $false)]

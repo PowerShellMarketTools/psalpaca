@@ -23,7 +23,7 @@ https://docs.alpaca.markets/reference/getaccount-1
 
 #>
 
-function Get-AlpacaAccount {
+Function Get-AlpacaAccount {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $false)]

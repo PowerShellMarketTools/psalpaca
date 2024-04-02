@@ -41,7 +41,7 @@ https://docs.alpaca.markets/reference/updatewatchlistbyname
 
 #>
 
-function Set-AlpacaWatchlist {
+Function Set-AlpacaWatchlist {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $false, ParameterSetName = 'ById')]

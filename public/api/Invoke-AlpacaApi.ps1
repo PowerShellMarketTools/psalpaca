@@ -35,7 +35,7 @@ This example places a buy order for 10 shares of AAPL stock using the Alpaca Tra
 
 #>
 
-function Invoke-AlpacaApi {
+Function Invoke-AlpacaApi {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $true)]

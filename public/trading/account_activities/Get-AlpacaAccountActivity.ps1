@@ -48,7 +48,7 @@ https://docs.alpaca.markets/reference/getaccountactivities-2
 
 #>
 
-function Get-AlpacaAccountActivity {
+Function Get-AlpacaAccountActivity {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $true)]

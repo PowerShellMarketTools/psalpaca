@@ -47,7 +47,7 @@ https://docs.alpaca.markets/reference/get-v2-corporate_actions-announcements-1
 
 #>
 
-function Get-AlpacaCorporateActionAnnouncement {
+Function Get-AlpacaCorporateActionAnnouncement {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $false, ParameterSetName = 'AnnouncementId')]

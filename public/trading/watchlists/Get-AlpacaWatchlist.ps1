@@ -37,7 +37,7 @@ https://docs.alpaca.markets/reference/getwatchlistbyname
 
 #>
 
-function Get-AlpacaWatchlist {
+Function Get-AlpacaWatchlist {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $false, ParameterSetName = 'ById')]

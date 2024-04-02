@@ -1,4 +1,4 @@
-function Set-AlpacaApiConfiguration {
+Function Set-AlpacaApiConfiguration {
     [CmdletBinding(SupportsShouldProcess=$true)]
     Param (
         [Parameter(Mandatory = $true)]

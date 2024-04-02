@@ -33,7 +33,7 @@ https://docs.alpaca.markets/reference/removeassetfromwatchlist
 
 #>
 
-function Remove-AlpacaWatchlistAsset {
+Function Remove-AlpacaWatchlistAsset {
     [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
     Param (
         [Parameter(Mandatory = $true)]

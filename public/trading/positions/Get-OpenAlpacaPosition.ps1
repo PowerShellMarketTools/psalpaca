@@ -29,7 +29,7 @@ Requires: PowerShell 5.1 or higher, Alpaca PowerShell module
 https://alpaca.markets/docs/api-documentation/api-v2/positions/#get-an-open-position
 
 #>
-function Get-OpenAlpacaPosition {
+Function Get-OpenAlpacaPosition {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $true)]

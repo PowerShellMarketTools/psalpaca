@@ -33,7 +33,7 @@ https://docs.alpaca.markets/reference/getorderbyorderid
 
 #>
 
-function Get-AlpacaOrderById {
+Function Get-AlpacaOrderById {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $true)]

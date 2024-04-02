@@ -36,7 +36,7 @@ https://docs.alpaca.markets/reference/deletewatchlistbyname
 
 #>
 
-function Remove-AlpacaWatchlist {
+Function Remove-AlpacaWatchlist {
     [CmdletBinding(SupportsShouldProcess=$true, ConfirmImpact='High')]
     Param (
         [Parameter(Mandatory = $false, ParameterSetName = 'ById')]

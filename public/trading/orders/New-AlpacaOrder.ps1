@@ -81,7 +81,7 @@ API Reference: Check the Alpaca API documentation for more details about the par
 https://docs.alpaca.markets/reference/postorder
 
 #>
-function New-AlpacaOrder {
+Function New-AlpacaOrder {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $true)]

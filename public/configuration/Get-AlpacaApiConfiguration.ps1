@@ -15,7 +15,7 @@ This example retrieves Alpaca API configuration information from the default cre
 
 #>
 
-function Get-AlpacaApiConfiguration {
+Function Get-AlpacaApiConfiguration {
     [CmdletBinding()]
     Param ()
 
