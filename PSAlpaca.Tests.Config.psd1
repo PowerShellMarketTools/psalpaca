@@ -1,11 +1,16 @@
 @{
-    Run = @{
+    Run          = @{
         Path = "./"
     }
-    Should = @{
+    Should       = @{
         ErrorAction = "Continue"
     }
     CodeCoverage = @{
         Enabled = $true
+    }
+    Output       = @{
+        Verbosity           = "Detailed"
+        StackTraceVerbosity = "Full"
+        CIFormat            = "GithubActions"
     }
 }
