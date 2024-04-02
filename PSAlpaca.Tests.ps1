@@ -37,6 +37,10 @@ Describe "Configuration" {
 }
 
 Describe "Data" {
+    BeforeAll {
+        Set-AlpacaApiConfiguration -ApiKey $env:ALPACA_API_KEY -ApiSecret $env:ALPACA_SECRET_KEY -Confirm:$false
+    }
+
     Context "Get-AlpacaCorporateActionsData" {
 
     }
@@ -115,6 +119,10 @@ Describe "Data" {
 }
 
 Describe "Trading" {
+    BeforeAll {
+        Set-AlpacaApiConfiguration -ApiKey $env:ALPACA_API_KEY -ApiSecret $env:ALPACA_SECRET_KEY -Confirm:$false
+    }
+
     Context "Get-AlpacaAccountActivity" {
 
     }
