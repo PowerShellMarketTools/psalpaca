@@ -4,7 +4,7 @@ Write-Verbose "Starting to process AlpacaBot module..."
 
 # Get a list of all .ps1 files under the 'Private' directory
 Write-Verbose "Retrieving .ps1 files from the 'Private' directory..."
-$PrivateFunctionFiles = Get-ChildItem -Path "$($PSScriptRoot)\private" -Filter '*.ps1' -Recurse
+$PrivateFunctionFiles = Get-ChildItem -Path "$($PSScriptRoot)\private" -Recurse | Where-Object {(($_.Extension -eq ".ps1") -and ($_.Name -notlike "*Tests.ps1*"))}
 
 # Dot-source each .ps1 file from the 'Private' directory to import functions into the current scope
 foreach ($PrivateFunctionFile in $PrivateFunctionFiles) {
@@ -14,7 +14,7 @@ foreach ($PrivateFunctionFile in $PrivateFunctionFiles) {
 
 # Get a list of all .ps1 files under the 'Public' directory
 Write-Verbose "Retrieving .ps1 files from the 'Public' directory..."
-$PublicFunctionFiles = Get-ChildItem -Path "$($PSScriptRoot)\public" -Recurse -Depth 3 | Where-Object {$_.Extension -eq ".ps1"}
+$PublicFunctionFiles = Get-ChildItem -Path "$($PSScriptRoot)\public" -Recurse | Where-Object {(($_.Extension -eq ".ps1") -and ($_.Name -notlike "*Tests.ps1*"))}
 
 # List to keep track of all function names that need to be exported
 $FunctionsToExport = @()
