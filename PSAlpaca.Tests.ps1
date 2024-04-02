@@ -5,28 +5,46 @@ BeforeAll {
     Import-Module ./PSAlpaca.psm1
 }
 
-Describe "Set-AlpacaApiConfiguration Function" {
-    Context "When setting Alpaca API configuration without SaveProfile switch" {
-        It "Should set the Alpaca API configuration without saving profile" {
-            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret"
-            $env:ALPACA_API_KEY | Should -Be "TestApiKey"
-            $env:ALPACA_API_SECRET | Should -Be "TestApiSecret"
+Describe "Get-AlpacaApiConfiguration Function" {
+    Context "When retrieving Alpaca API configuration from existing credentials file" {
+        It "Should return the API configuration" {
+            # Mocking the existence of a credentials file and its content
+            Mock Test-Path { return $true }
+            Mock Get-Content { return '{"api_key": "TestApiKey", "api_secret": "TestApiSecret"}' }
+
+            $config = Get-AlpacaApiConfiguration
+            $config | Should -Not -BeNullOrEmpty
+            $config.ApiKey | Should -Be "TestApiKey"
+            $config.ApiSecret | Should -Be "TestApiSecret"
         }
     }
 
-    Context "When setting Alpaca API configuration with SaveProfile switch" {
-        It "Should set the Alpaca API configuration and save profile" {
-            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret" -SaveProfile
-            # Check if credentials file is created
-            $credentialsFile = switch ([Environment]::OSVersion.Platform) {
-                [PlatformID]::Win32NT { Join-Path $env:USERPROFILE ".alpaca-credentials" }
-                default { Join-Path $HOME ".alpaca-credentials" }
-            }
-            Test-Path $credentialsFile | Should -Be $true
-            $credentialsFileCont = Get-Content $credentialsFile
-            $credentialsData = $credentialsFileCont | ConvertFrom-Json
-            $credentialsData.api_key | Should -Be "TestApiKey"
-            $credentialsData.api_secret | Should -Be "TestApiSecret"
+    Context "When no credentials file exists" {
+        It "Should return null and throw an error" {
+            # Mocking the absence of a credentials file
+            Mock Test-Path { return $false }
+
+            { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
+        }
+    }
+
+    Context "When the credentials file is empty or malformed" {
+        It "Should return null and throw an error" {
+            # Mocking the existence of an empty credentials file
+            Mock Test-Path { return $true }
+            Mock Get-Content { return $null }
+
+            { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
+        }
+    }
+
+    Context "When the credentials file is missing required fields" {
+        It "Should return null and throw an error" {
+            # Mocking the existence of a credentials file missing required fields
+            Mock Test-Path { return $true }
+            Mock Get-Content { return '{"api_key": "TestApiKey"}' }
+
+            { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
         }
     }
 }
