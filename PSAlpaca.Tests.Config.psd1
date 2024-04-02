@@ -9,7 +9,8 @@
         Enabled = $true
     }
     Output       = @{
-        Verbosity           = "Detailed"
+        Verbosity           = "Normal"
+        StackTraceVerbosity = "Full"
         CIFormat            = "GithubActions"
     }
 }
