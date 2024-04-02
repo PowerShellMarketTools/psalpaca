@@ -5,41 +5,35 @@ BeforeAll {
     Import-Module ./PSAlpaca.psm1
 }
 
-Describe "Get-AlpacaApiConfiguration Function" {
-    Context "When retrieving Alpaca API configuration from existing credentials file" {
-        It "Should return the API configuration" {
+Describe "PSAlpaca" {
+    Context "GetConfiguration" {
+        It "EnvironmentCredentialsReturned" {
             # Mocking the existence of a credentials file and its content
             Mock Test-Path { return $true }
             Mock Get-Content { return '{"api_key": "TestApiKey", "api_secret": "TestApiSecret"}' }
 
             $config = Get-AlpacaApiConfiguration
             $config | Should -Not -BeNullOrEmpty
-            $config.ApiKey | Should -Be "TestApiKey"
-            $config.ApiSecret | Should -Be "TestApiSecret"
+            $config.api_key | Should -Be "TestApiKey"
+            $config.api_key | Should -Be "TestApiSecret"
         }
-    }
 
-    Context "When no credentials file exists" {
-        It "Should return null and throw an error" {
+        It "NoCredentialsFoundInEnvironment" {
             # Mocking the absence of a credentials file
             Mock Test-Path { return $false }
 
             { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
         }
-    }
 
-    Context "When the credentials file is empty or malformed" {
-        It "Should return null and throw an error" {
+        It "NoCredentialsFoundInCredentialsFile" {
             # Mocking the existence of an empty credentials file
             Mock Test-Path { return $true }
             Mock Get-Content { return $null }
 
             { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
         }
-    }
 
-    Context "When the credentials file is missing required fields" {
-        It "Should return null and throw an error" {
+        It "MissingFieldsInCredentialsFile" {
             # Mocking the existence of a credentials file missing required fields
             Mock Test-Path { return $true }
             Mock Get-Content { return '{"api_key": "TestApiKey"}' }
@@ -47,10 +41,8 @@ Describe "Get-AlpacaApiConfiguration Function" {
             { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
         }
     }
-}
 
-Describe "Get-AlpacaApiConfiguration Function" {
-    Context "When retrieving Alpaca API configuration from existing credentials file" {
+    Context "SetConfiguration" {
         It "Should return the API configuration" {
             # Mocking the existence of a credentials file and its content
             Mock Test-Path { return $true }
@@ -61,18 +53,14 @@ Describe "Get-AlpacaApiConfiguration Function" {
             $config.api_key | Should -Be "TestApiKey"
             $config.api_secret | Should -Be "TestApiSecret"
         }
-    }
-
-    Context "When no credentials file exists" {
         It "Should return null and throw an error" {
             # Mocking the absence of a credentials file
             Mock Test-Path { return $false }
 
             { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
         }
-    }
+    
 
-    Context "When the credentials file is empty or malformed" {
         It "Should return null and throw an error" {
             # Mocking the existence of an empty credentials file
             Mock Test-Path { return $true }
@@ -80,9 +68,8 @@ Describe "Get-AlpacaApiConfiguration Function" {
 
             { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
         }
-    }
+    
 
-    Context "When the credentials file is missing required fields" {
         It "Should return null and throw an error" {
             # Mocking the existence of a credentials file missing required fields
             Mock Test-Path { return $true }
@@ -91,18 +78,14 @@ Describe "Get-AlpacaApiConfiguration Function" {
             { Get-AlpacaApiConfiguration } | Should -Throw "No Alpaca API key and secret found. Use Set-AlpacaApiConfiguration."
         }
     }
-}
 
-Describe "Invoke-AlpacaApi Function" {
-    # Mocking Get-AlpacaApiConfiguration function
-    Mock Get-AlpacaApiConfiguration { 
-        return @{
-            ApiKey    = $env:ALPACA_API_KEY
-            ApiSecret = $env:ALPACA_SECRET_KEY
+    Context "InvokeAlpacaApi" {
+        Mock Get-AlpacaApiConfiguration { 
+            return @{
+                ApiKey    = $env:ALPACA_API_KEY
+                ApiSecret = $env:ALPACA_SECRET_KEY
+            }
         }
-    }
-
-    Context "When invoking Alpaca API without specifying required parameters" {
         It "Should throw an error when ApiName parameter is not provided" {
             { Invoke-AlpacaApi -Endpoint "bars/day" -Method "GET" } | Should -Throw
         }
@@ -114,9 +97,6 @@ Describe "Invoke-AlpacaApi Function" {
         It "Should throw an error when Method parameter is not provided" {
             { Invoke-AlpacaApi -ApiName "Data" -Endpoint "bars/day" } | Should -Throw
         }
-    }
-
-    Context "When invoking Alpaca API with valid parameters" {
         It "Should return response for retrieving daily bars data" {
             $response = Invoke-AlpacaApi -ApiName "Data" -Endpoint "bars/day" -Method "GET" -QueryString "?symbol=AAPL&limit=5"
             $response | Should -Not -BeNullOrEmpty
@@ -130,9 +110,6 @@ Describe "Invoke-AlpacaApi Function" {
             $response | Should -BeOfType [System.Object]
             # Add more specific tests for the response data if needed
         }
-    }
-
-    Context "When invoking Alpaca API with invalid parameters" {
         It "Should return null if no Alpaca API configuration is found" {
             Mock Get-AlpacaApiConfiguration { return $null }
             $response = Invoke-AlpacaApi -ApiName "Data" -Endpoint "bars/day" -Method "GET" -QueryString "?symbol=AAPL&limit=5"
