@@ -2,7 +2,7 @@
 
 # Import the relevant function for testing
 BeforeAll {
-    . "Invoke-AlpacaApi.ps1"
+    Import-Module PSAlpaca
 }
 
 Describe "AlpacaApi" {
