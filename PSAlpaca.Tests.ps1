@@ -17,14 +17,16 @@ Describe "Set-AlpacaApiConfiguration Function" {
     Context "When setting Alpaca API configuration with SaveProfile switch" {
         It "Should set the Alpaca API configuration and save profile" {
             Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret" -SaveProfile
-            $env:ALPACA_API_KEY | Should -Be "TestApiKey"
-            $env:ALPACA_API_SECRET | Should -Be "TestApiSecret"
             # Check if credentials file is created
             $credentialsFile = switch ([Environment]::OSVersion.Platform) {
                 [PlatformID]::Win32NT { Join-Path $env:USERPROFILE ".alpaca-credentials" }
                 default { Join-Path $HOME ".alpaca-credentials" }
             }
             Test-Path $credentialsFile | Should -Be $true
+            $credentialsFileCont = Get-Content $credentialsFile
+            $credentialsData = $credentialsFileCont | ConvertTo-Json
+            $credentialsData.api_key | Should -Be "TestApiKey"
+            $credentialsData.api_secret | Should -Be "TestApiSecret"
         }
 
         It "Should prompt -Before overwriting existing profile" {
