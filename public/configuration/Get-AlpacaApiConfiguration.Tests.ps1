@@ -7,10 +7,8 @@ BeforeAll {
 
 Describe "Configuration" {
     Context "Get-AlpacaApiConfiguration" {
-        BeforeAll {
-            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret" -Confirm:$false
-        }
         It "CredentialsReturnedAndCorrect" {
+            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret" -Confirm:$false
             Get-AlpacaApiConfiguration | Should -Not -BeNullOrEmpty
             (Get-AlpacaApiConfiguration).ApiKey | Should -Be "TestApiKey"
             (Get-AlpacaApiConfiguration).ApiSecret | Should -Be "TestApiSecret"
