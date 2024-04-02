@@ -8,7 +8,7 @@ BeforeAll {
 Describe "PSAlpaca" {
     Context "Set-AlpacaApiConfiguration" {
         It "EnvironmentCredentialsReturned" {
-            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -SecretKey "TestApiSecret"
+            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret"
             $config = Get-AlpacaApiConfiguration
             $config | Should -Not -BeNullOrEmpty
             $config.ApiKey | Should -Be "TestApiKey"
@@ -16,7 +16,7 @@ Describe "PSAlpaca" {
         }
 
         It "ProfileCredentialsReturned" {
-            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -SecretKey "TestApiSecret" -SaveProfile -Confirm:$false
+            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret" -SaveProfile -Confirm:$false
             Test-Path -Path "$($HOME)/.alpaca-credentials" | Should -BeTrue
             $config = Get-Content -Path "$($HOME)/.alpaca-credentials"
             $config.ApiKey | Should -Be "TestApiKey"
@@ -26,7 +26,7 @@ Describe "PSAlpaca" {
 
     Context "Get-AlpacaApiConfiguration" {
         BeforeAll {
-            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -SecretKey "TestApiSecret" -SaveProfile -Confirm:$false
+            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret" -SaveProfile -Confirm:$false
         }
         It "CredentialsReturnedAndCorrect" {
             Get-AlpacaApiConfiguration | Should -Not -BeNullOrEmpty
@@ -42,7 +42,7 @@ Describe "PSAlpaca" {
                 ApiSecret = $env:ALPACA_SECRET_KEY
             }
         }
-        
+
         It "Should throw an error when ApiName parameter is not provided" {
             { Invoke-AlpacaApi -Endpoint "bars/day" -Method "GET" } | Should -Throw
         }
