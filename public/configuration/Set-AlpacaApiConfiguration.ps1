@@ -50,14 +50,14 @@ Function Set-AlpacaApiConfiguration {
     if (Test-Path $CredentialsPath) {
         if ($PSCmdlet.ShouldProcess("The file $CredentialsPath already exists. Do you want to overwrite it?")) {
             $Credentials | ConvertTo-Json | Set-Content -Path $CredentialsPath -Force
-            Write-Host "Alpaca API credentials profile saved successfully."
+            Write-Verbose "Alpaca API credentials profile saved successfully."
         }
         else {
-            Write-Host "Operation cancelled by the user. Existing profile not modified."
+            Write-Verbose "Operation cancelled by the user. Existing profile not modified."
         }
     }
     else {
         $Credentials | ConvertTo-Json | Set-Content -Path $CredentialsPath -Force
-        Write-Host "Alpaca API credentials profile saved successfully."
+        Write-Verbose "Alpaca API credentials profile saved successfully."
     }
 }
