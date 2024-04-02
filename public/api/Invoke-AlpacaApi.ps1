@@ -39,7 +39,7 @@ Function Invoke-AlpacaApi {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $true)]
-        [ValidateSet("Broker", "Trading", "Data")]
+        [ValidateSet("Trading", "Data")]
         [string]$ApiName,
 
         [Parameter(Mandatory = $true)]

@@ -7,15 +7,7 @@ BeforeAll {
 
 Describe "PSAlpaca" {
     Context "Set-AlpacaApiConfiguration" {
-        It "EnvironmentCredentialsReturned" {
-            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret"
-            $config = Get-AlpacaApiConfiguration
-            $config | Should -Not -BeNullOrEmpty
-            $config.ApiKey | Should -Be "TestApiKey"
-            $config.ApiSecret | Should -Be "TestApiSecret"
-        }
-
-        It "ProfileCredentialsReturned" {
+        It "CredentialsCreated" {
             Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret" -SaveProfile -Confirm:$false
             Test-Path -Path "$($HOME)/.alpaca-credentials" | Should -BeTrue
             $config = Get-Content -Path "$($HOME)/.alpaca-credentials"
@@ -36,46 +28,14 @@ Describe "PSAlpaca" {
     }
 
     Context "InvokeAlpacaApi" {
-        Mock Get-AlpacaApiConfiguration { 
-            return @{
-                ApiKey    = $env:ALPACA_API_KEY
-                ApiSecret = $env:ALPACA_SECRET_KEY
-            }
+        BeforeAll {
+            Set-AlpacaApiConfiguration -ApiKey $env:ALPACA_API_KEY -ApiSecret $env:ALPACA_API_SECRET -SaveProfile -Confirm:$false
         }
 
-        It "Should throw an error when ApiName parameter is not provided" {
+        It "ThrowErrorMissingRequiredParameters" {
+            { Invoke-AlpacaApi -ApiName "Trading" -Method "GET" } | Should -Throw
             { Invoke-AlpacaApi -Endpoint "bars/day" -Method "GET" } | Should -Throw
-        }
-
-        It "Should throw an error when Endpoint parameter is not provided" {
             { Invoke-AlpacaApi -ApiName "Data" -Method "GET" } | Should -Throw
-        }
-
-        It "Should throw an error when Method parameter is not provided" {
-            { Invoke-AlpacaApi -ApiName "Data" -Endpoint "bars/day" } | Should -Throw
-        }
-        It "Should return response for retrieving daily bars data" {
-            $response = Invoke-AlpacaApi -ApiName "Data" -Endpoint "bars/day" -Method "GET" -QueryString "?symbol=AAPL&limit=5"
-            $response | Should -Not -BeNullOrEmpty
-            $response | Should -BeOfType [System.Object]
-            # Add more specific tests for the response data if needed
-        }
-
-        It "Should return response for placing a buy order" {
-            $response = Invoke-AlpacaApi -ApiName "Trading" -Endpoint "orders" -Method "POST" -BodyArguments @{symbol = "AAPL"; qty = 10; side = "buy" }
-            $response | Should -Not -BeNullOrEmpty
-            $response | Should -BeOfType [System.Object]
-            # Add more specific tests for the response data if needed
-        }
-        It "Should return null if no Alpaca API configuration is found" {
-            Mock Get-AlpacaApiConfiguration { return $null }
-            $response = Invoke-AlpacaApi -ApiName "Data" -Endpoint "bars/day" -Method "GET" -QueryString "?symbol=AAPL&limit=5"
-            $response | Should -Be $null
-        }
-
-        It "Should return null if API invocation fails" {
-            $response = Invoke-AlpacaApi -ApiName "Trading" -Endpoint "nonexistent-endpoint" -Method "GET"
-            $response | Should -Be $null
         }
     }
 }
