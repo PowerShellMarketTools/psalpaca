@@ -14,4 +14,11 @@ Describe "Configuration" {
             (Get-AlpacaApiConfiguration).ApiSecret | Should -Be "TestApiSecret"
         }
     }
+
+    Context "Set-AlpacaApiConfiguration" {
+        It "CredentialsFileCreated" {
+            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret" -Confirm:$false
+            Test-Path -Path "$($HOME)/.alpaca-credentials" | Should -BeTrue
+        }
+    }
 }

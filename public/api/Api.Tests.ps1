@@ -5,7 +5,7 @@ BeforeAll {
     Import-Module PSAlpaca
 }
 
-Describe "AlpacaApi" {
+Describe "Api" {
     Context "Invoke-AlpacaApi" {
         BeforeAll {
             Set-AlpacaApiConfiguration -ApiKey $env:ALPACA_API_KEY -ApiSecret $env:ALPACA_SECRET_KEY -Confirm:$false
