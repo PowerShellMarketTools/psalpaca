@@ -8,7 +8,7 @@ BeforeAll {
 Describe "AlpacaApi" {
     Context "Invoke-AlpacaApi" {
         BeforeAll {
-            Set-AlpacaApiConfiguration -ApiKey $env:ALPACA_API_KEY -ApiSecret $env:ALPACA_API_SECRET -SaveProfile -Confirm:$false
+            Set-AlpacaApiConfiguration -ApiKey $env:ALPACA_API_KEY -ApiSecret $env:ALPACA_SECRET_KEY -SaveProfile -Confirm:$false
         }
 
         It "ThrowErrorMissingRequiredParameters" {

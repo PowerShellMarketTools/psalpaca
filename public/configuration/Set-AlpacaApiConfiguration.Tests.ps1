@@ -8,7 +8,7 @@ BeforeAll {
 Describe "Configuration" {
     Context "Set-AlpacaApiConfiguration" {
         It "CredentialsCreated" {
-            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret" -SaveProfile -Confirm:$false
+            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret" -Confirm:$false
             Test-Path -Path "$($HOME)/.alpaca-credentials" | Should -BeTrue
             $config = Get-Content -Path "$($HOME)/.alpaca-credentials"
             $config.ApiKey | Should -Be "TestApiKey"
