@@ -22,12 +22,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Copy Local Files
-      run: Copy-Item . -Destination "C:\Program Files\WindowsPowerShell\Modules\PSAlpaca" -Recurse -Force -Verbose
+      run: Copy-Item . -Destination "C:\Program Files\WindowsPowerShell\Modules\PSAlpaca" -Recurse -Force
     - name: Import PSAlpaca Module
       run: Import-Module PSAlpaca
     - name: Install Pester 5
       run: |
-        Install-Module Pester -Scope AllUsers -RequiredVersion $LatestPester.Version -Confirm:$false -Force -Verbose
+        Install-Module Pester -Scope AllUsers -RequiredVersion $LatestPester.Version -Confirm:$false -Force
         Get-Module -Name Pester -ListAvailable
     - name: Run Pester Tests with Configuration
       run: |
