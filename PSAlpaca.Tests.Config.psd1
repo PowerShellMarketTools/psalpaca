@@ -10,7 +10,6 @@
     }
     Output       = @{
         Verbosity           = "Detailed"
-        StackTraceVerbosity = "Full"
         CIFormat            = "GithubActions"
     }
 }
