@@ -1,6 +1,5 @@
 #Requires -Modules @{ ModuleName = 'Pester'; RequiredVersion = '5.5.0'}
 
-# Import the relevant function for testing
 BeforeAll {
     Import-Module PSAlpaca
 }
