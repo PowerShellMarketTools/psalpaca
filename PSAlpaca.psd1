@@ -72,7 +72,7 @@
     FunctionsToExport      = @(
         'Get-AlpacaAccountPortfolioHistory',
         'Get-AllOpenAlpacaPositions',
-        'Get-OpenAlpacaPosition',
+        'Get-AlpacaOpenPosition',
         'Remove-AllOpenAlpacaPositions',
         'Remove-AlpacaOpenPosition',
         'Add-AlpacaWatchlistAsset',
