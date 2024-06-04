@@ -1,6 +1,6 @@
-# AlpacaBot.psm1
+# PSAlpaca.psm1
 
-Write-Verbose "Starting to process AlpacaBot module..."
+Write-Verbose "Starting to process PSAlpaca module..."
 
 # Get a list of all .ps1 files under the 'Private' directory
 Write-Verbose "Retrieving .ps1 files from the 'Private' directory..."
