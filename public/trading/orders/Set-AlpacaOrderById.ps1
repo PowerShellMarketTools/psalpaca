@@ -40,7 +40,7 @@ https://docs.alpaca.markets/reference/patchorderbyorderid
 
 #>
 
-function Set-AlpacaOrderById {
+Function Set-AlpacaOrderById {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $true)]

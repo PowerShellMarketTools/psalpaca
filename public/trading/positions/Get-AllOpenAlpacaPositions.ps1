@@ -30,7 +30,7 @@ https://docs.alpaca.markets/reference/getallopenpositions
 
 #>
 
-function Get-AllOpenAlpacaPositions {
+Function Get-AllOpenAlpacaPositions {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $false)]

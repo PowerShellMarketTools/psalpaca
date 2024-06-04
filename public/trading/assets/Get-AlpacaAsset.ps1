@@ -41,7 +41,7 @@ https://docs.alpaca.markets/reference/get-v2-assets-symbol_or_asset_id-1
 
 #>
 
-function Get-AlpacaAsset {
+Function Get-AlpacaAsset {
     [CmdletBinding()]
     Param (
         [Parameter(ParameterSetName='BySymbolOrAssetId')]

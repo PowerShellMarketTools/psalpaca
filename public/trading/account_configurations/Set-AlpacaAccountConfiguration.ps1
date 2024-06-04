@@ -65,7 +65,7 @@ https://docs.alpaca.markets/reference/patchaccountconfig-1
 
 #>
 
-function Set-AlpacaAccountConfiguration {
+Function Set-AlpacaAccountConfiguration {
     [CmdletBinding(SupportsShouldProcess=$true, ConfirmImpact='High')]
     Param (
         [Parameter(Mandatory = $false)]

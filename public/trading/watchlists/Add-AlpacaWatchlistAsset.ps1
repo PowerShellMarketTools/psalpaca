@@ -40,7 +40,7 @@ https://docs.alpaca.markets/reference/addassettowatchlistbyname
 
 #>
 
-function Add-AlpacaWatchlistAsset {
+Function Add-AlpacaWatchlistAsset {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $false, ParameterSetName = 'ById')]

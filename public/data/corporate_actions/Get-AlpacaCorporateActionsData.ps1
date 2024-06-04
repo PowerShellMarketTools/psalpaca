@@ -9,19 +9,19 @@ Function Get-AlpacaCorporateActionsData {
             {
                 foreach ($type in $_) {
                     if ($type -notin @(
-                        "reverse_split",
-                        "forward_split",
-                        "unit_split",
-                        "cash_dividend",
-                        "stock_dividend",
-                        "spin_off",
-                        "cash_merger",
-                        "stock_merger",
-                        "stock_and_cash_merger",
-                        "redemption",
-                        "name_change",
-                        "worthless_removal"
-                    )) {
+                            "reverse_split",
+                            "forward_split",
+                            "unit_split",
+                            "cash_dividend",
+                            "stock_dividend",
+                            "spin_off",
+                            "cash_merger",
+                            "stock_merger",
+                            "stock_and_cash_merger",
+                            "redemption",
+                            "name_change",
+                            "worthless_removal"
+                        )) {
                         throw "Unsupported type: $($type). Supported values are 'reverse_split', 'forward_split', 'unit_split', 'cash_dividend', 'stock_dividend', 'spin_off', 'cash_merger', 'stock_merger', 'stock_and_cash_merger', 'redemption', 'name_change', 'worthless_removal'."
                     }
                 }
@@ -68,11 +68,11 @@ Function Get-AlpacaCorporateActionsData {
 
     if ($Sort) {
         $QueryParameters.Add('sort', $(
-            switch ($Sort) {
-                "Ascending" {'asc'}
-                "Descending" {'desc'}
-            }
-        ))
+                switch ($Sort) {
+                    "Ascending" { 'asc' }
+                    "Descending" { 'desc' }
+                }
+            ))
     }
 
     $ApiParams = @{

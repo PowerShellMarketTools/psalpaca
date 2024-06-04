@@ -16,26 +16,23 @@ env:
 jobs:
   unit-tests:
     runs-on: windows-latest
+    env:
+      ALPACA_API_KEY: ${{ secrets.ALPACA_API_KEY }}
+      ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
     steps:
     - uses: actions/checkout@v4
     - name: Copy Local Files
-      run: Copy-Item . -Destination "C:\Program Files\WindowsPowerShell\Modules\PSAlpaca" -Recurse -Force -Verbose
+      run: Copy-Item . -Destination "C:\Program Files\WindowsPowerShell\Modules\PSAlpaca" -Recurse -Force
     - name: Import PSAlpaca Module
       run: Import-Module PSAlpaca
     - name: Install Pester 5
       run: |
-        Install-Module Pester -Scope AllUsers -RequiredVersion $LatestPester.Version -Confirm:$false -Force -Verbose
+        Install-Module Pester -Scope AllUsers -RequiredVersion $LatestPester.Version -Confirm:$false -Force
         Get-Module -Name Pester -ListAvailable
-    - name: Run Pester Tests with Configuration
+    - name: Run Pester Tests
       run: |
         Import-Module Pester -RequiredVersion ${{ env.PESTER_VERSION }}
         $configFilePath = Join-Path -Path $env:GITHUB_WORKSPACE -ChildPath "PSAlpaca.Tests.Config.psd1"
         $configData = Import-PowerShellDataFile -Path $configFilePath
-        $pesterConfig = [PesterConfiguration]::new()
-        $configData.PSObject.Properties | ForEach-Object {
-            $propName = $_.Name
-            if ($pesterConfig.PSObject.Properties[$propName]) {
-                $pesterConfig.$propName = $_.Value
-            }
-        }
+        $pesterConfig = New-PesterConfiguration -Hashtable $configData
         Invoke-Pester -Configuration $pesterConfig

@@ -30,7 +30,7 @@ The cmdlet now supports -Confirm and -WhatIf parameters for safer operation.
 https://docs.alpaca.markets/reference/deleteorderbyorderid
 
 #>
-function Remove-AlpacaOrderById {
+Function Remove-AlpacaOrderById {
     [CmdletBinding(SupportsShouldProcess=$true, ConfirmImpact='High')]
     Param (
         [Parameter(Mandatory = $true)]

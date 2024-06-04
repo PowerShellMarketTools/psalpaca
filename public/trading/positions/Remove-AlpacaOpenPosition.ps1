@@ -42,7 +42,7 @@ The cmdlet now supports -Confirm and -WhatIf parameters for safer operation.
 https://docs.alpaca.markets/reference/deleteopenposition
 #>
 
-function Remove-AlpacaPositionBySymbol {
+Function Remove-AlpacaPositionBySymbol {
     [CmdletBinding(SupportsShouldProcess=$true, ConfirmImpact='High')]
     Param (
         [Parameter(Mandatory = $true)]
