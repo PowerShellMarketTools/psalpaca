@@ -68,7 +68,7 @@ Describe "Data" {
                 Sort       = 'Descending'
             }
 
-            { Get-AlpacaCorporateActionsData @params } | Should -Throw -ExpectedMessage 'Unsupported type: invalid_type. Supported values are...'
+            { Get-AlpacaCorporateActionsData @params } | Should -Throw -ExpectedMessage "Unsupported type: invalid_type. Supported values are 'reverse_split', 'forward_split', 'unit_split', 'cash_dividend', 'stock_dividend', 'spin_off', 'cash_merger', 'stock_merger', 'stock_and_cash_merger', 'redemption', 'name_change', 'worthless_removal'."
         }
     }
     Context "Get-AlpacaCryptoHistoricalBarsData" {
