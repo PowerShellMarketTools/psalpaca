@@ -80,6 +80,9 @@ Function Invoke-AlpacaApi {
             if ($Endpoint -like "*stocks*") {
                 "v2"
             }
+            elseif ($Endpoint -like "*corporate-actions*") {
+                "v1beta1"
+            }
             else {
                 "v1beta3"
             } 
