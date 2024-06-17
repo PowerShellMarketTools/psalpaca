@@ -37,12 +37,9 @@ Describe "Configuration" {
 }
 
 Describe "Data" {
-    BeforeAll {
-        Set-AlpacaApiConfiguration -ApiKey $env:ALPACA_API_KEY -ApiSecret $env:ALPACA_SECRET_KEY -Confirm:$false
-    }
-
     Context "Get-AlpacaCorporateActionsData" {
         It 'returns the correct data when called with valid parameters' {
+            Set-AlpacaApiConfiguration -ApiKey $env:ALPACA_API_KEY -ApiSecret $env:ALPACA_SECRET_KEY -Confirm:$false
             $params = @{
                 Symbols    = @('AAPL', 'MSFT')
                 Types      = @('reverse_split', 'forward_split')
@@ -58,6 +55,7 @@ Describe "Data" {
         }
 
         It 'throws an error when called with an invalid type' {
+            Set-AlpacaApiConfiguration -ApiKey $env:ALPACA_API_KEY -ApiSecret $env:ALPACA_SECRET_KEY -Confirm:$false
             $params = @{
                 Symbols    = @('AAPL', 'MSFT')
                 Types      = @('invalid_type')
