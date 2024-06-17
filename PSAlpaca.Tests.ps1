@@ -42,7 +42,34 @@ Describe "Data" {
     }
 
     Context "Get-AlpacaCorporateActionsData" {
+        It 'returns the correct data when called with valid parameters' {
+            $params = @{
+                Symbols    = @('AAPL', 'MSFT')
+                Types      = @('reverse_split', 'forward_split')
+                Start      = (Get-Date).AddDays(-30)
+                End        = (Get-Date)
+                MaxResults = 10
+                Sort       = 'Descending'
+            }
 
+            $result = Get-AlpacaCorporateActionsData @params
+
+            $result.StatusCode | Should -Be 200
+            $result.Content | Should -Be 'Test Content'
+        }
+
+        It 'throws an error when called with an invalid type' {
+            $params = @{
+                Symbols    = @('AAPL', 'MSFT')
+                Types      = @('invalid_type')
+                Start      = (Get-Date).AddDays(-30)
+                End        = (Get-Date)
+                MaxResults = 10
+                Sort       = 'Descending'
+            }
+
+            { Get-AlpacaCorporateActionsData @params } | Should -Throw -ExpectedMessage 'Unsupported type: invalid_type. Supported values are...'
+        }
     }
     Context "Get-AlpacaCryptoHistoricalBarsData" {
     
