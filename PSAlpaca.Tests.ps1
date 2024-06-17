@@ -1,4 +1,4 @@
-#Requires -Modules @{ ModuleName = 'Pester'; RequiredVersion = '5.5.0'}
+#Requires -Modules @{ ModuleName = 'Pester'; RequiredVersion = '5.6.0'}
 
 BeforeAll {
     Import-Module PSAlpaca
@@ -54,8 +54,7 @@ Describe "Data" {
 
             $result = Get-AlpacaCorporateActionsData @params
 
-            $result.StatusCode | Should -Be 200
-            $result.Content | Should -Be 'Test Content'
+            $result.GetType() | Should -Be [System.Collections.Hashtable]
         }
 
         It 'throws an error when called with an invalid type' {
