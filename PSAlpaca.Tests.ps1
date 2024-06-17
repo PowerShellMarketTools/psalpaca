@@ -51,7 +51,7 @@ Describe "Data" {
 
             $result = Get-AlpacaCorporateActionsData @params
 
-            $result.GetType() | Should -Be [System.Collections.Hashtable]
+            $result.GetType() | Should -Be [PSCustomObject]
         }
 
         It 'throws an error when called with an invalid type' {
