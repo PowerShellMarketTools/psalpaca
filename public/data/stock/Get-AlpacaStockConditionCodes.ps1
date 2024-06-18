@@ -25,3 +25,34 @@
     Date: [Date]
     Version: [Version Number]
 #>
+Function Get-AlpacaStockConditionCodes {
+    [CmdletBinding()]
+    Param (
+        [Parameter(Mandatory = $true)]
+        [ValidateSet('Trade', 'Quote')]
+        [string]$TickType,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateSet('A', 'B', 'C')]
+        [string]$Tape
+    )
+
+    $ApiParams = @{
+        ApiName  = "Data"
+        Endpoint = "stocks/meta/conditions"
+        Method   = "Get"
+        Query    = @{
+            tick_type = $TickType
+            tape      = $Tape
+        }
+    }
+
+    Try {
+        $Response = Invoke-AlpacaApi @ApiParams
+        return $Response
+    }
+    Catch [System.Exception] {
+        Write-Error "API call failed: $($_.Exception)"
+        return $null
+    }
+}
