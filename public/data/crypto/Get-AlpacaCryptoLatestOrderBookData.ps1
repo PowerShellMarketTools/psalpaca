@@ -38,6 +38,10 @@ Function Get-AlpacaCryptoLatestOrderBookData {
 
     Try {
         $Response = Invoke-AlpacaApi @ApiParams
+        if ($Response.orderbooks.Count -eq 0) {
+            Write-Verbose "No order book data found for $Symbols."
+            return $null
+        }
         return $Response
     }
     Catch [System.Exception] {
