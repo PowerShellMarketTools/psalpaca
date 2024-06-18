@@ -158,7 +158,7 @@ Describe "Data" {
     
         It "Should return null when no data found" {
             $result = Get-AlpacaCryptoLatestBarsData -Location "US" -Symbols "XYZ/ABC"
-            $result | Should -BeNullOrEmpty
+            $result | Should -Be @{bars=$null}
         }
     }
 
@@ -597,7 +597,7 @@ Describe "Trading" {
     Context "Remove-AlpacaWatchlistAsset" {
 
     }
-    
+
     Context "Set-AlpacaWatchlist" {
 
     }
