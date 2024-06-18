@@ -38,6 +38,10 @@ Function Get-AlpacaCryptoLatestBarsData {
 
     Try {
         $Response = Invoke-AlpacaApi @ApiParams
+        if ($Response.bars.Count -eq 0) {
+            Write-Verbose "No bars data found for $Symbols."
+            return $null
+        }
         return $Response
     }
     Catch [System.Exception] {
