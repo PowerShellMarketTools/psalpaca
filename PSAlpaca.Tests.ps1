@@ -37,9 +37,12 @@ Describe "Configuration" {
 }
 
 Describe "Data" {
+    BeforeEach {
+        Set-AlpacaApiConfiguration -ApiKey $env:ALPACA_API_KEY -ApiSecret $env:ALPACA_SECRET_KEY -Confirm:$false
+    }
+
     Context "Get-AlpacaCorporateActionsData" {
-        It 'returns the correct data when called with valid parameters' {
-            Set-AlpacaApiConfiguration -ApiKey $env:ALPACA_API_KEY -ApiSecret $env:ALPACA_SECRET_KEY -Confirm:$false
+        It 'returns data when called with valid parameters' {
             $params = @{
                 Symbols    = @('AAPL', 'MSFT')
                 Types      = @('reverse_split', 'forward_split')
@@ -51,11 +54,10 @@ Describe "Data" {
 
             $result = Get-AlpacaCorporateActionsData @params
 
-            $result| Should -Not -BeNullOrEmpty
+            $result | Should -Not -BeNullOrEmpty
         }
 
         It 'throws an error when called with an invalid type' {
-            Set-AlpacaApiConfiguration -ApiKey $env:ALPACA_API_KEY -ApiSecret $env:ALPACA_SECRET_KEY -Confirm:$false
             $params = @{
                 Symbols    = @('AAPL', 'MSFT')
                 Types      = @('invalid_type')
@@ -69,13 +71,76 @@ Describe "Data" {
         }
     }
     Context "Get-AlpacaCryptoHistoricalBarsData" {
+        It 'returns the correct data when called with valid parameters' {
+            $params = @{
+                Location          = 'US'
+                Symbols           = 'BTC/USD'
+                Timeframe         = 1
+                TimeframeInterval = 'Hour'
+                Start             = (Get-Date).AddDays(-30)
+                End               = (Get-Date)
+                MaxResults        = 10
+                Sort              = 'Descending'
+            }
     
+            $result = Get-AlpacaCryptoHistoricalBarsData @params
+    
+            $result | Should -Not -BeNullOrEmpty
+            $result.bars.'BTC/USD' | Should -Not -BeNullOrEmpty
+        }
+    
+        It 'throws an error when called with an invalid symbol format' {
+            $params = @{
+                Location          = 'US'
+                Symbols           = 'invalid_format'
+                Timeframe         = 1
+                TimeframeInterval = 'Hour'
+                Start             = (Get-Date).AddDays(-30)
+                End               = (Get-Date)
+                MaxResults        = 10
+                Sort              = 'Descending'
+            }
+    
+            { Get-AlpacaCryptoHistoricalBarsData @params } | Should -Throw -ExpectedMessage 'Incorrect Symbols format. Format must be in ''CURRENCY\CURRENCY'' format. Ex: BTC/USD, USD/ETH, etc...'
+        }
     }
     Context "Get-AlpacaCryptoHistoricalQuotesData" {
+        It "Should return error when Symbols parameter is not in correct format" {
+            { Get-AlpacaCryptoHistoricalQuotesData -Location "US" -Symbols "BTCUSD" -Timeframe 1 -TimeframeInterval "Hour" } | Should -Throw
+        }
     
+        It "Should return error when Timeframe and TimeframeInterval are not specified" {
+            { Get-AlpacaCryptoHistoricalQuotesData -Location "US" -Symbols "BTC/USD" } | Should -Throw
+        }
+    
+        It "Should return data when valid parameters are passed" {
+            $result = Get-AlpacaCryptoHistoricalQuotesData -Location "US" -Symbols "BTC/USD" -Timeframe 1 -TimeframeInterval "Hour"
+            $result | Should -Not -BeNullOrEmpty
+        }
+    
+        It "Should return null when no data found" {
+            $result = Get-AlpacaCryptoHistoricalQuotesData -Location "US" -Symbols "XYZ/ABC" -Timeframe 1 -TimeframeInterval "Hour"
+            $result | Should -BeNullOrEmpty
+        }
     }
-    Context "Get-AlpacaCryptoHistoricalTradesData" {
+    Describe "Get-AlpacaCryptoHistoricalTradesData" {
+        It "Should return error when Symbols parameter is not in correct format" {
+            { Get-AlpacaCryptoHistoricalTradesData -Location "US" -Symbols "BTCUSD" -Timeframe 1 -TimeframeInterval "Hour" } | Should -Throw
+        }
     
+        It "Should return error when Timeframe and TimeframeInterval are not specified" {
+            { Get-AlpacaCryptoHistoricalTradesData -Location "US" -Symbols "BTC/USD" } | Should -Throw
+        }
+    
+        It "Should return data when valid parameters are passed" {
+            $result = Get-AlpacaCryptoHistoricalTradesData -Location "US" -Symbols "BTC/USD" -Timeframe 1 -TimeframeInterval "Hour"
+            $result | Should -Not -BeNullOrEmpty
+        }
+    
+        It "Should return null when no data found" {
+            $result = Get-AlpacaCryptoHistoricalTradesData -Location "US" -Symbols "XYZ/ABC" -Timeframe 1 -TimeframeInterval "Hour"
+            $result | Should -BeNullOrEmpty
+        }
     }
     Context "Get-AlpacaCryptoLatestBarsData" {
     
@@ -143,7 +208,7 @@ Describe "Data" {
 }
 
 Describe "Trading" {
-    BeforeAll {
+    BeforeEach {
         Set-AlpacaApiConfiguration -ApiKey $env:ALPACA_API_KEY -ApiSecret $env:ALPACA_SECRET_KEY -Confirm:$false
     }
 
