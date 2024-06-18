@@ -1,21 +1,3 @@
-<#
-.SYNOPSIS
-    Retrieves the latest bars data for cryptocurrencies from the Alpaca API.
-
-.DESCRIPTION
-    This function retrieves the latest bars data for cryptocurrencies from the Alpaca API based on the specified location and symbols.
-
-.PARAMETER Location
-    Specifies the location for which the data is to be retrieved. Currently, only "US" is supported.
-
-.PARAMETER Symbols
-    Specifies the symbols of the cryptocurrencies for which latest data is to be retrieved. Should be in the format 'CURRENCY\CURRENCY', e.g., BTC/USD, USD/ETH, etc.
-
-.EXAMPLE
-    Get-AlpacaCryptoLatestBarsData -Location "US" -Symbols "BTC/USD"
-    Retrieves the latest bars data for the BTC/USD pair.
-
-#>
 Function Get-AlpacaCryptoLatestBarsData {
     [CmdletBinding()]
     Param (
@@ -38,6 +20,10 @@ Function Get-AlpacaCryptoLatestBarsData {
 
     Try {
         $Response = Invoke-AlpacaApi @ApiParams
+        if ($Response.bars.Count -eq 0) {
+            Write-Verbose "No bars data found for $Symbols."
+            return $null
+        }
         return $Response
     }
     Catch [System.Exception] {

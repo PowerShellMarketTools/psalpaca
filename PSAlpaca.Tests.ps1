@@ -158,7 +158,7 @@ Describe "Data" {
     
         It "Should return null when no data found" {
             $result = Get-AlpacaCryptoLatestBarsData -Location "US" -Symbols "XYZ/ABC"
-            $result | Should -Be @{bars=$null}
+            $result | Should -BeNullOrEmpty
         }
     }
 
