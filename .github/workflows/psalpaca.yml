@@ -28,7 +28,7 @@ jobs:
       run: Import-Module PSAlpaca
     - name: Install Pester 5
       run: |
-        Install-Module Pester -Scope AllUsers -RequiredVersion $LatestPester.Version -Confirm:$false -Force
+        Install-Module Pester -Scope AllUsers -RequiredVersion $env:PESTER_VERSION -Force -SkipPublisherCheck -AllowClobber
         Get-Module -Name Pester -ListAvailable
     - name: Run Pester Tests
       run: |
