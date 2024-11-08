@@ -29,7 +29,7 @@ jobs:
     - name: Install Pester 5
       run: |
         Install-Module Pester -Scope AllUsers -RequiredVersion $env:PESTER_VERSION -Force -SkipPublisherCheck -AllowClobber
-        $Pester3Modules = Get-Module -Name Pester -ListAvailable | Where-Object Version -lt 5
+        $Pester3Modules = Get-Module -Name Pester -ListAvailable | Where-Object { $_.Version.Major -lt 5 }
         foreach ($module in $Pester3Modules) {
           Remove-Item -Path $module.ModuleBase -Recurse -Force
         }
