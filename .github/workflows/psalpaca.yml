@@ -1,6 +1,7 @@
 name: PSAlpaca
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - "main"
