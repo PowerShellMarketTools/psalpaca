@@ -30,7 +30,7 @@ Describe "Configuration" {
 
     Context "Set-AlpacaApiConfiguration" {
         It "CredentialsFileCreated" {
-            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret" -Confirm:$false
+            Set-AlpacaApiConfiguration -ApiKey "TestApiKey" -ApiSecret "TestApiSecret" -SaveProfile -Confirm:$false
             Test-Path -Path "$($HOME)/.alpaca-credentials" | Should -BeTrue
         }
     }
