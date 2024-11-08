@@ -28,11 +28,8 @@ jobs:
       run: Import-Module PSAlpaca
     - name: Install Pester 5
       run: |
+        Uninstall-Module Pester -AllVersions -Force -ErrorAction SilentlyContinue
         Install-Module Pester -Scope AllUsers -RequiredVersion $env:PESTER_VERSION -Force -SkipPublisherCheck -AllowClobber
-        $Pester3Modules = Get-Module -Name Pester -ListAvailable | Where-Object { $_.Version.Major -lt 5 }
-        foreach ($module in $Pester3Modules) {
-          Remove-Item -Path $module.ModuleBase -Recurse -Force
-        }
         Get-Module -Name Pester -ListAvailable
     - name: Run Pester Tests
       run: |
