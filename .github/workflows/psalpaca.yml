@@ -33,6 +33,10 @@ jobs:
         Get-Module -Name Pester -ListAvailable
     - name: Run Pester Tests
       run: |
+        $ExistingPesterModules = Get-Module -Name Pester
+        foreach ($PesterModule in $ExistingPesterModules) {
+          Remove-Module -Name $PesterModule.Name -Force
+        }
         Import-Module Pester -RequiredVersion ${{ env.PESTER_VERSION }}
         $configFilePath = Join-Path -Path $env:GITHUB_WORKSPACE -ChildPath "PSAlpaca.Tests.Config.psd1"
         $configData = Import-PowerShellDataFile -Path $configFilePath
