@@ -1,18 +1,3 @@
-<#
-.SYNOPSIS
-Retrieves Alpaca API configuration information including API key and API secret from a JSON file.
-
-.DESCRIPTION
-The Get-AlpacaApiConfiguration cmdlet retrieves Alpaca API configuration information from a JSON file and ensures that the required credentials are available.
-
-.PARAMETER None
-This cmdlet does not accept any parameters.
-
-.EXAMPLE
-Get-AlpacaApiConfiguration
-
-This example retrieves Alpaca API configuration information from the default credentials file location and displays it on the console.
-#>
 Function Get-AlpacaApiConfiguration {
     [CmdletBinding()]
     Param ()
@@ -32,6 +17,16 @@ Function Get-AlpacaApiConfiguration {
         $Credentials = Get-Content -Path $CredentialsPath -Raw | ConvertFrom-Json
         $ApiKey = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Credentials.ApiKey))
         $ApiSecret = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($Credentials.ApiSecret))
+    }
+    else {
+        # Retrieve credentials from environment variables
+        $EnvApiKey = [Environment]::GetEnvironmentVariable("ALPACA_API_KEY", "User")
+        $EnvApiSecret = [Environment]::GetEnvironmentVariable("ALPACA_API_SECRET", "User")
+
+        if ($EnvApiKey -ne $null -and $EnvApiSecret -ne $null) {
+            $ApiKey = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($EnvApiKey))
+            $ApiSecret = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($EnvApiSecret))
+        }
     }
 
     # Validate if necessary credentials are available
